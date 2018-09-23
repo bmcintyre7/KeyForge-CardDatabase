@@ -1,0 +1,6 @@
+Queries
+*******
+- Most Collected
+- Total Userbooks In System
+- Total Users
+- Newest User

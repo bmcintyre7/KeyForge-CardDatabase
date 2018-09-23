@@ -1,0 +1,9 @@
+C:\Code\KeyForge-CardDatabase\KeyforgeCardPoster\KeyforgeCardPoster\bin\Debug\KeyforgeCardPoster.exe.config
+C:\Code\KeyForge-CardDatabase\KeyforgeCardPoster\KeyforgeCardPoster\bin\Debug\KeyforgeCardPoster.exe
+C:\Code\KeyForge-CardDatabase\KeyforgeCardPoster\KeyforgeCardPoster\bin\Debug\KeyforgeCardPoster.pdb
+C:\Code\KeyForge-CardDatabase\KeyforgeCardPoster\KeyforgeCardPoster\obj\Debug\KeyforgeCardPoster.csprojResolveAssemblyReference.cache
+C:\Code\KeyForge-CardDatabase\KeyforgeCardPoster\KeyforgeCardPoster\obj\Debug\KeyforgeCardPoster.Properties.Resources.resources
+C:\Code\KeyForge-CardDatabase\KeyforgeCardPoster\KeyforgeCardPoster\obj\Debug\KeyforgeCardPoster.csproj.GenerateResource.Cache
+C:\Code\KeyForge-CardDatabase\KeyforgeCardPoster\KeyforgeCardPoster\obj\Debug\KeyforgeCardPoster.exe
+C:\Code\KeyForge-CardDatabase\KeyforgeCardPoster\KeyforgeCardPoster\obj\Debug\KeyforgeCardPoster.pdb
+C:\Code\KeyForge-CardDatabase\KeyforgeCardPoster\KeyforgeCardPoster\obj\Debug\KeyforgeCardPoster.CardExpansion.resources

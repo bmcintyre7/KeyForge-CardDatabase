@@ -1,0 +1,4 @@
+C:\Code\KeyForge-CardDatabase\LibraryAccessService\User\bin\Release\DTO.dll
+C:\Code\KeyForge-CardDatabase\LibraryAccessService\User\bin\Release\DTO.pdb
+C:\Code\KeyForge-CardDatabase\LibraryAccessService\User\obj\Release\DTO.dll
+C:\Code\KeyForge-CardDatabase\LibraryAccessService\User\obj\Release\DTO.pdb

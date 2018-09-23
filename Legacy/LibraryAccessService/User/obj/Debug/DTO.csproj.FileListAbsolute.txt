@@ -1,0 +1,5 @@
+C:\Code\KeyForge-CardDatabase\LibraryAccessService\User\obj\Debug\DTO.csprojResolveAssemblyReference.cache
+C:\Code\KeyForge-CardDatabase\LibraryAccessService\User\bin\Debug\DTO.dll
+C:\Code\KeyForge-CardDatabase\LibraryAccessService\User\bin\Debug\DTO.pdb
+C:\Code\KeyForge-CardDatabase\LibraryAccessService\User\obj\Debug\DTO.dll
+C:\Code\KeyForge-CardDatabase\LibraryAccessService\User\obj\Debug\DTO.pdb
