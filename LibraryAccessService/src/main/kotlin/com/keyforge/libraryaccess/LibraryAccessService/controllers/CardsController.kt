@@ -1,5 +1,6 @@
 package com.keyforge.libraryaccess.LibraryAccessService.controllers
 
+import com.keyforge.libraryaccess.LibraryAccessService.data.House
 import com.keyforge.libraryaccess.LibraryAccessService.repositories.CardRepository
 import com.keyforge.libraryaccess.LibraryAccessService.responses.CardListBody
 import org.springframework.web.bind.annotation.*
@@ -15,6 +16,6 @@ class CardsController (
         //for (card in c.cards) {
             
         //}
-        return cardRepository.toString();
+        return cardRepository.toString()
     }
 }
