@@ -1,10 +1,12 @@
 package com.keyforge.libraryaccess.LibraryAccessService.repositories
 
+import com.keyforge.libraryaccess.LibraryAccessService.data.CardExpansions
 import com.keyforge.libraryaccess.LibraryAccessService.data.Type
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface TypeRepository : JpaRepository<Type, Int> {
-    fun findByName(name: String) : Type
+interface CardExpansionsRepository : JpaRepository<CardExpansions, Int> {
+    fun findByCardId(id: Int) : CardExpansions
+    fun findByExpansionId(id: Int) : CardExpansions
 }

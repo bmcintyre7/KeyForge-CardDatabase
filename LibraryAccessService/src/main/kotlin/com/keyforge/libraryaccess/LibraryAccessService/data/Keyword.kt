@@ -6,6 +6,6 @@ import javax.persistence.Id
 @Entity
 data class Keyword (
     @Id
-    val id: Int = 0,
+    val id: Int? = null,
     val name: String = ""
 )

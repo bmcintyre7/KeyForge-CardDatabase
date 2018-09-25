@@ -5,7 +5,7 @@ import javax.persistence.*
 @Entity
 data class CardTraits (
     @Id
-    val id: Int = 0,
+    val id: Int? = null,
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cardId")
     val card: Card,

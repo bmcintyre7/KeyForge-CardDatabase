@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface TraitsRepository : JpaRepository<Trait, Int> {
+interface TraitRepository : JpaRepository<Trait, Int> {
     fun findByName(name: String) : Trait
 }

@@ -8,6 +8,6 @@ import javax.persistence.Table
 @Table(name = "house")
 data class House (
     @Id
-    val id: Int = 0,
+    val id: Int? = null,
     val name: String = ""
 )

@@ -8,6 +8,6 @@ import javax.persistence.Table
 @Table(name = "expansion")
 data class Expansion (
     @Id
-    val id: Int = 0,
+    val id: Int? = null,
     val name: String = ""
 )
