@@ -3,9 +3,11 @@ package com.keyforge.libraryaccess.LibraryAccessService.data
 import javax.persistence.*
 
 @Entity
+@Table(name = "card")
 data class Card (
     @Id
-    val id: Int = 0,
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    val id: Int? = null,
     val name: String = "",
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "typeId")
@@ -16,6 +18,6 @@ data class Card (
     val armor: String? = null,
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rarityId")
-    val rarityId: Rarity,
+    val rarity: Rarity,
     val artist: String = ""
 )
