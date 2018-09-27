@@ -6,6 +6,7 @@ import javax.persistence.*
 @Table(name = "cardKeywords")
 data class CardKeywords (
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     val id: Int? = null,
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cardId")
