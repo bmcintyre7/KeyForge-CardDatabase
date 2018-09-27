@@ -71,4 +71,7 @@ dependencies {
 	runtime "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
 	runtime "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 	runtime "com.fasterxml.jackson.module:jackson-module-kotlin"
+
+	// Gson Dependencies
+	compile "com.google.code.gson:gson:2.8.0"
 }
