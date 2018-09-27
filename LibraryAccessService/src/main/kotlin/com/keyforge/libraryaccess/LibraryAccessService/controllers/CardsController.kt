@@ -3,7 +3,6 @@ package com.keyforge.libraryaccess.LibraryAccessService.controllers
 import com.keyforge.libraryaccess.LibraryAccessService.data.*
 import com.keyforge.libraryaccess.LibraryAccessService.repositories.*
 import com.keyforge.libraryaccess.LibraryAccessService.responses.CardBody
-import com.keyforge.libraryaccess.LibraryAccessService.responses.CardListBody
 import org.springframework.web.bind.annotation.*
 import java.lang.Exception
 
@@ -23,7 +22,7 @@ class CardsController (
 
 ) {
     @RequestMapping(value ="/cards", method = [RequestMethod.POST])
-    fun postCards(@RequestBody card : CardBody) : String {
+    fun postCard(@RequestBody card : CardBody) : String {
 
         //val c: CardListBody = cards
         val responseData = mutableListOf<String>()

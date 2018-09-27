@@ -3,6 +3,7 @@ package com.keyforge.libraryaccess.LibraryAccessService.data
 import javax.persistence.*
 
 @Entity
+@Table(name = "cardTraits")
 data class CardTraits (
     @Id
     val id: Int? = null,
