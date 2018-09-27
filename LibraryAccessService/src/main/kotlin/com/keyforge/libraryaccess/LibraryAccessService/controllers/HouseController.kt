@@ -26,6 +26,6 @@ class HouseController (
         for (house in houses) {
             responseData.add(house.name)
         }
-        return gson.toJson(responseData)
+        return responseData.joinToString(", ")
     }
 }
