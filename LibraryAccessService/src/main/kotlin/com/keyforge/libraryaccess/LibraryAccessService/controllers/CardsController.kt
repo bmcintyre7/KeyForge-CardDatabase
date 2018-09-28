@@ -31,12 +31,14 @@ class CardsController (
             theType = typeRepository.findByName(card.type)
         } catch (e: Exception) {
             theType = Type(null, card.type)
+            typeRepository.saveAndFlush(theType)
         }
         var theRarity: Rarity?
         try {
             theRarity = rarityRepository.findByName(card.rarity)
         } catch (e: Exception) {
             theRarity = Rarity(null, card.rarity)
+            rarityRepository.saveAndFlush(theRarity)
         }
         //for (card in c.cards) {
         var toAdd = Card(
@@ -58,9 +60,10 @@ class CardsController (
             val setAndNumber = expansion.split(" #")
             var theExpansion: Expansion?
             try {
-                theExpansion = expansionRepository.findByName(expansion)
+                theExpansion = expansionRepository.findByName(setAndNumber[0])
             } catch (e: Exception) {
-                theExpansion = Expansion(null, expansion)
+                theExpansion = Expansion(null, setAndNumber[0])
+                expansionRepository.saveAndFlush(theExpansion)
             }
             val cardExpansions = CardExpansions(
                 null,
@@ -77,6 +80,7 @@ class CardsController (
                 theHouse = houseRepository.findByName(house)
             } catch (e: Exception) {
                 theHouse = House(null, house)
+                houseRepository.saveAndFlush(theHouse)
             }
             val cardHouses = CardHouses(
                 null,
@@ -92,6 +96,7 @@ class CardsController (
                 theTrait = traitRepository.findByName(trait)
             } catch (e: Exception) {
                 theTrait = Trait(null, trait)
+                traitRepository.saveAndFlush(theTrait)
             }
             val cardTraits = CardTraits(
                     null,
@@ -107,6 +112,7 @@ class CardsController (
                 theKeyword = keywordRepository.findByName(keyword)
             } catch (e: Exception) {
                 theKeyword = Keyword(null, keyword)
+                keywordRepository.saveAndFlush(theKeyword)
             }
             val cardKeywords = CardKeywords(
                 null,
