@@ -41,7 +41,6 @@ repositories {
 	mavenCentral()
 }
 
-
 dependencies {
 	// Kotlin Dependencies
 	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
@@ -56,6 +55,8 @@ dependencies {
 	compile "org.springframework.boot:spring-boot-starter-data-jpa"
 	compile "org.springframework.data:spring-data-jpa"
 	compile "org.springframework.boot:spring-boot-starter-actuator"
+	compile('org.springframework.boot:spring-boot-starter-webflux')
+	testCompile('io.projectreactor:reactor-test')
 
 	// Hibernate Dependencies
 	compile "org.hibernate:hibernate-core:5.2.15.Final"

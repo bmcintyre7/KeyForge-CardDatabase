@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CardHousesRepository : JpaRepository<CardHouses, Int> {
-    fun findByCardId(id: Int) : CardHouses
-    fun findByHouseId(id: Int) : CardHouses
+    fun findByCardId(id: Int) : List<CardHouses>
+    fun findByHouseId(id: Int) : List<CardHouses>
 }

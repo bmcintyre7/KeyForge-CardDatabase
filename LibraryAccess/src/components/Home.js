@@ -1,11 +1,13 @@
 import React from 'react';
-import { SetView } from './SetView'
+import { FiltersBox } from './FiltersBox'
 
 class Home extends React.Component {
   render() {
     return (
       <div>
-        <SetView set={'core'} />
+        Welcome to Library Access!
+        <br/>
+        <FiltersBox />
       </div>
     );
   }

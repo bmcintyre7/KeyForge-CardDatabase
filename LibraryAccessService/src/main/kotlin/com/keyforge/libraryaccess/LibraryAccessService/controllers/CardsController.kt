@@ -124,4 +124,68 @@ class CardsController (
         //}
         return "Added:\n-------\n" + responseData.joinToString(",\n")
     }
+
+    @RequestMapping(value ="/cards/{expansion}/{id}", method = [RequestMethod.GET])
+    fun getCardByNumber(@PathVariable("expansion") exp: String, @PathVariable("id") id: Int) : CardBody? {
+        val expansions = cardExpansionsRepository.findByNumber(Integer.toString(id))
+        for (cardExpansion in expansions) {
+            if (cardExpansion.expansion.name.toLowerCase() == exp.toLowerCase())
+                return cardToCardBody(cardRepository.findById(cardExpansion.card.id!!).get())
+        }
+        return null
+    }
+
+    @RequestMapping(value="/cards/house/{house}", method = [RequestMethod.GET])
+    fun getCardsByHouse(@PathVariable("house") house: String): List<CardBody> {
+        val theHouse = houseRepository.findByName(house)
+        val theCardHouses = cardHousesRepository.findByHouseId(theHouse.id!!)
+        val responseData = mutableListOf<CardBody>()
+        for (cardHouse in theCardHouses) {
+            responseData.add(cardToCardBody(cardHouse.card))
+        }
+        return responseData
+    }
+
+    fun cardToCardBody(card: Card): CardBody {
+        val cardExpansions = cardExpansionsRepository.findByCardId(card.id!!)
+        val cardHouses = cardHousesRepository.findByCardId(card.id!!)
+        val cardKeywords = cardKeywordsRepository.findByCardId(card.id!!)
+        val cardTraits = cardTraitsRepository.findByCardId(card.id!!)
+
+        var expansions = mutableListOf<String>()
+        var houses = mutableListOf<String>()
+        var keywords = mutableListOf<String>()
+        var traits = mutableListOf<String>()
+
+        for (expansion in cardExpansions) {
+            expansions.add(expansion.expansion.name)
+        }
+
+        for (house in cardHouses) {
+            houses.add(house.house.name)
+        }
+
+        for (keyword in cardKeywords) {
+            keywords.add(keyword.keyword.name)
+        }
+
+        for (trait in cardTraits) {
+            traits.add(trait.trait.name)
+        }
+
+        return CardBody(
+            card.name,
+            card.type.name,
+            card.text,
+            card.aember,
+            card.armor,
+            card.power,
+            card.rarity.name,
+            card.artist,
+            expansions,
+            houses,
+            keywords,
+            traits
+        )
+    }
 }

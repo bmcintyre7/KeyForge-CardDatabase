@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CardTraitsRepository : JpaRepository<CardTraits, Int> {
-    fun findByCardId(id: Int) : CardTraits
+    fun findByCardId(id: Int) : List<CardTraits>
     fun findByTraitId(id: Int) : CardTraits
 }

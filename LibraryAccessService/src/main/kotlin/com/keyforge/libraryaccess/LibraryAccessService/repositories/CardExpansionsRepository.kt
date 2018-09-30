@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CardExpansionsRepository : JpaRepository<CardExpansions, Int> {
-    fun findByCardId(id: Int) : CardExpansions
-    fun findByExpansionId(id: Int) : CardExpansions
+    fun findByCardId(id: Int) : List<CardExpansions>
+    fun findByExpansionId(id: Int) : List<CardExpansions>
+    fun findByNumber(number: String): List<CardExpansions>
 }
