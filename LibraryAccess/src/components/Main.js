@@ -7,6 +7,7 @@ import {BrowserRouter, Route, Switch, BrowserHistory} from 'react-router-dom';
 import { Home } from './Home'
 import { DetailCardView } from './DetailCardView'
 import { ExpansionView } from './ExpansionView'
+import { AdvancedSearch} from './AdvancedSearch'
 
 class AppController extends React.Component {
   render() {
@@ -26,6 +27,7 @@ class AppController extends React.Component {
       <BrowserRouter forceRefresh={!supportsHistory} history={BrowserHistory}>
         <Switch>
           <Route exact path='/' component={Home}/>
+          <Route exact path='/advanced' component={AdvancedSearch}/>
           <Route exact path='/cards/:expansionName' component={ExpansionView}/>
           <Route exact path='/cards/:expansionName/:cardId' component={DetailCardView}/>
         </Switch>

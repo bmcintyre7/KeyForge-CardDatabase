@@ -18,7 +18,7 @@ function createCORSRequest(method, url) {
   return xhr;
 }
 
-class FiltersBox extends React.Component {
+class SearchBox extends React.Component {
   constructor(props) {
     super(props)
     this.getImageString = this.getImageString.bind(this)
@@ -37,23 +37,21 @@ class FiltersBox extends React.Component {
   }
 
   render() {
-    var houses = this.httpGetHouses().split(', ');
-    var display = new Array();
-    for(var i = 0; i < houses.length; ++i)
-      display.push((
-        // TODO: Figure out filters? This should filter by house. Maybe get all cards in the beginning? Seems awful.
-        <Link to={'/cards/house/' + houses[i]}>
-          <img className='mx-1' src={this.getImageString(houses[i])} />
-        </Link>
-      ));
-
     return (
       <div className='justify-content-center align-items-center text-center'>
-        <div className='fluid-container h-100 border border-3 m-5 displayInline px-4 py-2'>
-          <div className="row h-100 justify-content-center align-items-center">
-            <div className="col-12 px-0 text-center">
-              {display}
+        <div className='container h-100 displayInline'>
+          <div className='row'>
+            <div className='col-sm' />
+            <div className='col-sm'>
+              <div className='form-group'>
+                <label for='search'>Search:</label>
+                <input type='text' className='form-control' id='search' />
+                <Link to={'/advanced'}>
+                  Advanced Search
+                </Link>
+               </div>
             </div>
+            <div className='col-sm' />
           </div>
         </div>
       </div>
@@ -61,4 +59,4 @@ class FiltersBox extends React.Component {
   }
 }
 
-export { FiltersBox };
+export { SearchBox };

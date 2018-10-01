@@ -1,5 +1,8 @@
 import React from 'react';
-import { FiltersBox } from './FiltersBox'
+
+import { Link } from 'react-router-dom'
+import { SearchBox } from './SearchBox'
+
 
 class Home extends React.Component {
   render() {
@@ -7,7 +10,7 @@ class Home extends React.Component {
       <div>
         Welcome to Library Access!
         <br/>
-        <FiltersBox />
+        <SearchBox />
       </div>
     );
   }

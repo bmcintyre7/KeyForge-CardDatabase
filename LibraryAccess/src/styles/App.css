@@ -27,3 +27,39 @@ body {
 .border-3 {
   border-width:3px !important;
 }
+
+.smallHouseLogo {
+  width: 7%;
+  min-width: 45px;
+  height: auto;
+}
+
+.minWidth-60 {
+  min-width: 60px;
+  height: auto;
+}
+
+.minWidth-100 {
+  min-width: 100px;
+  height: auto;
+}
+
+.minWidth-150 {
+  min-width: 150px;
+  height: auto;
+}
+
+.maxWidth-100 {
+  max-width: 100px;
+  height: auto;
+}
+
+.searchLabel {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.tinyLabel {
+  font-size: 12px;
+  font-style: italic;
+}
