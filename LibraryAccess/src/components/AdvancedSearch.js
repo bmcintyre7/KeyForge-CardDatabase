@@ -27,6 +27,7 @@ class AdvancedSearch extends React.Component {
     this.makeTextSearchField = this.makeTextSearchField.bind(this);
     this.makeComparisonSearchField = this.makeComparisonSearchField.bind(this);
     this.makeChecklistSearchField = this.makeChecklistSearchField.bind(this);
+    this.doSearch = this.doSearch.bind(this);
     this.slugify = this.slugify.bind(this);
   }
 
@@ -117,7 +118,7 @@ class AdvancedSearch extends React.Component {
       display.push((
         //<Link to={'/cards/house/' + houses[i]}>
         <div key={'checkbox-'+slugifiedLabel+'-'+i}className='col-auto displayInline px-0 mx-3'>
-          <label className='align-middle m-0 p-0'><input className='align-middle mr-1' type='checkbox' value=''/>{options[i]}</label>
+          <label className='align-middle m-0 p-0'><input className='align-middle mr-1' type='checkbox' value='' id={slugifiedLabel + '_Value'}/>{options[i]}</label>
         </div>
         //</Link>
       ));
@@ -144,6 +145,38 @@ class AdvancedSearch extends React.Component {
     );
   }
 
+  doSearch() {
+    var name = $('#name_Value').val();
+    var text = $('#text_Value').val();
+    var artist = $('#artist_Value').val();
+    var houses = new Map();
+    houses.set('Brobnar', $('#brobnar_Value').is(":checked"));
+    houses.set('Dis', $('#dis_Value').is(":checked"));
+    houses.set('Logos', $('#logos_Value').is(":checked"));
+    houses.set('Mars', $('#mars_Value').is(":checked"));
+    houses.set('Sanctum', $('#sanctum_Value').is(":checked"));
+    houses.set('Shadows', $('#shadows_Value').is(":checked"));
+    houses.set('Untamed', $('#untamed_Value').is(":checked"));
+    var rarities = new Map();
+    rarities.set('Common', $('#common_Value').val());
+    rarities.set('Uncommon', $('#uncommon_Value').val());
+    rarities.set('Rare', $('#rare_Value').val());
+    var aember = new Array (
+      $('#aember_Select').val(),
+      $('#aember_Value').val()
+    );
+    var power = new Array (
+      $('#power_Select').val(),
+      $('#power_Value').val()
+    );
+    var armor = new Array (
+      $('#armor_Select').val(),
+      $('#armor_Value').val()
+    );
+
+    // TODO: Keywords/Traits since they should be tag style input and that's not implemented yet
+  }
+
   render() {
     var houses = this.httpGetHouses().split(', ');
     var displayHouses = new Array();
@@ -151,7 +184,7 @@ class AdvancedSearch extends React.Component {
       displayHouses.push((
         //<Link to={'/cards/house/' + houses[i]}>
         <div key={'houses-'+i}className='displayInline maxWidth-100'>
-          <input type='checkbox' value=''/><img className='mx-1 smallHouseLogo' src={this.getImageString(houses[i])}/>
+          <input type='checkbox' value='' id={this.slugify(houses[i]) + '_Value'}/><img className='mx-1 smallHouseLogo' src={this.getImageString(houses[i])}/>
         </div>
         //</Link>
       ));
@@ -199,7 +232,7 @@ class AdvancedSearch extends React.Component {
           <div className='row  justify-content-center align-items-center'>
             <div className='col-3' />
             <div className='col'>
-              <button className='btn'>Search</button>
+              <button className='btn' onClick={this.doSearch}>Search</button>
             </div>
             <div className='col-2' />
           </div>
