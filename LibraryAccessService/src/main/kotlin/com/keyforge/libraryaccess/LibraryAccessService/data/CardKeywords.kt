@@ -13,5 +13,6 @@ data class CardKeywords (
     val card: Card,
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "keywordId")
-    val keyword: Keyword
+    val keyword: Keyword,
+    val value: String? = null
 )

@@ -39,6 +39,7 @@ compileTestKotlin {
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 dependencies {
@@ -72,6 +73,8 @@ dependencies {
 	runtime "com.fasterxml.jackson.datatype:jackson-datatype-jdk8"
 	runtime "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 	runtime "com.fasterxml.jackson.module:jackson-module-kotlin"
+
+	compile("au.com.console:kotlin-jpa-specification-dsl:0.1.0")
 
 	// Gson Dependencies
 	compile "com.google.code.gson:gson:2.8.0"

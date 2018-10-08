@@ -8,6 +8,7 @@ import { Home } from './Home'
 import { DetailCardView } from './DetailCardView'
 import { ExpansionView } from './ExpansionView'
 import { AdvancedSearch} from './AdvancedSearch'
+import { SearchResults} from './SearchResults';
 
 class AppController extends React.Component {
   render() {
@@ -30,6 +31,7 @@ class AppController extends React.Component {
           <Route exact path='/advanced' component={AdvancedSearch}/>
           <Route exact path='/cards/:expansionName' component={ExpansionView}/>
           <Route exact path='/cards/:expansionName/:cardId' component={DetailCardView}/>
+          <Route exact path='/searchResults' component={SearchResults}/>
         </Switch>
     </BrowserRouter>
     );

@@ -49,6 +49,16 @@ body {
   height: auto;
 }
 
+.minWidth-250 {
+  min-width: 250px;
+  height: auto;
+}
+
+.minWidth-400 {
+  min-width: 400px;
+  height: auto;
+}
+
 .maxWidth-100 {
   max-width: 100px;
   height: auto;

@@ -9,6 +9,7 @@ data class CardBody (
     val power: String? = null,
     val rarity: String = "",
     val artist: String = "",
+    val imageNames: MutableList<String>,
     val expansions: MutableList<String>,
     val houses: MutableList<String>,
     val keywords: MutableList<String>,

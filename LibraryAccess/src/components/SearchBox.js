@@ -38,22 +38,17 @@ class SearchBox extends React.Component {
 
   render() {
     return (
-      <div className='justify-content-center align-items-center text-center'>
-        <div className='container h-100 displayInline'>
-          <div className='row'>
-            <div className='col-sm' />
-            <div className='col-sm'>
-              <div className='form-group'>
-                <label for='search'>Search:</label>
-                <input type='text' className='form-control' id='search' />
-                <Link to={'/advanced'}>
-                  Advanced Search
-                </Link>
-               </div>
-            </div>
-            <div className='col-sm' />
+      <div>
+        <div className='input-group'>
+          <input type='text' className='form-control' id='search' />
+          <div className='input-group-append'>
+            <button className="btn btn-default" type="button">Search</button>
           </div>
         </div>
+        <br/>
+        <Link to={'/advanced'}>
+          Advanced Search
+        </Link>
       </div>
     );
   }

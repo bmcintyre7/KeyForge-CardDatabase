@@ -25,8 +25,8 @@ class CardView extends React.Component {
     this.httpGetCard = this.httpGetCard.bind(this);
   }
 
-  getImageString() {
-    return '/images/cards/' + this.props.expansion + '-' + this.props.number + '.jpg';
+  getImageString(fileName) {
+    return '/images/cards/' + fileName + '.jpg';
   }
 
   httpGetCard() {
@@ -40,14 +40,20 @@ class CardView extends React.Component {
   render() {
     //console.log(this.httpGetCard())
     //var theCard = JSON.parse(this.httpGetCard())
+    var theCard = this.props.card;
+    var fullExpansionObj = theCard['expansions'][theCard['expansions'].length - 1]
+    var newestExpansion = fullExpansionObj.substr(0, fullExpansionObj.indexOf(' #'));
+    var newestImage = theCard['imageNames'][theCard['imageNames'].length - 1];
+    var newestExpansionNumber = fullExpansionObj.substr(fullExpansionObj.indexOf(' #') + 2);
+
     return (
       <div>
-        {this.props.expansion}
+        {theCard.name}
         <br/>
-        {this.props.number}
+        {theCard['expansions'][theCard['expansions'].length - 1]}
         <br/>
-        <Link to={'/cards/' + this.props.expansion + '/' + this.props.number}>
-          <img src={ this.getImageString() } alt={ 'test' } width='250' height='350'/>
+        <Link to={'/cards/' + newestExpansion + '/' + newestExpansionNumber}>
+          <img src={ this.getImageString(newestImage) } alt={ 'test' } width='250' height='350'/>
         </Link>
       </div>
     );
