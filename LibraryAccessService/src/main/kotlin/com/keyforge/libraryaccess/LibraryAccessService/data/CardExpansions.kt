@@ -1,5 +1,6 @@
 package com.keyforge.libraryaccess.LibraryAccessService.data
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
@@ -8,6 +9,7 @@ data class CardExpansions (
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     val id: Int? = null,
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cardId")
     val card: Card,

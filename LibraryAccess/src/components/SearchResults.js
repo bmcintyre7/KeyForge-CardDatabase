@@ -41,11 +41,11 @@ class SearchResults extends React.Component {
     var searchResults = JSON.parse(this.httpGetCards());
 
     console.log(searchResults);
-    console.log(searchResults['cards'].length);
+    console.log(searchResults.length);
     var display = new Array();
-    for (var i = 0; i < searchResults['cards'].length; i++) {
+    for (var i = 0; i < searchResults.length; i++) {
       display.push((
-        <div key={'card-' + searchResults['cards'][i]['name']} className='displayInline mx-3 my-3'><CardView card={searchResults['cards'][i]}/></div>
+        <div key={'card-' + searchResults[i]['name']} className='displayInline mx-3 my-3'><CardView card={searchResults[i]}/></div>
       ));
     }
 

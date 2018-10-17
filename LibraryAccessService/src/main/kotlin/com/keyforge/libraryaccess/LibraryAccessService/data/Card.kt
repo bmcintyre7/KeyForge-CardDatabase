@@ -1,6 +1,7 @@
 package com.keyforge.libraryaccess.LibraryAccessService.data
 
 import com.keyforge.libraryaccess.LibraryAccessService.responses.RarityBody
+import java.security.Key
 import javax.persistence.*
 
 @Entity
@@ -20,9 +21,14 @@ data class Card (
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "rarityId")
     val rarity: Rarity,
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "card")
+    val expansions: List<CardExpansions>,
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "card", targetEntity = CardHouses::class)
+    val houses: List<House>,
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "card", targetEntity = CardTraits::class)
+    val traits: List<Trait>,
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "card", targetEntity = CardKeywords::class)
+    val keywords: List<Keyword>,
     val artist: String = ""
-) {
-    fun rarityAsRarityBody() : RarityBody {
-        return RarityBody(name = rarity.name)
-    }
-}
+
+)

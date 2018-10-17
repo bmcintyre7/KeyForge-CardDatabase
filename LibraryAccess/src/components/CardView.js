@@ -41,16 +41,18 @@ class CardView extends React.Component {
     //console.log(this.httpGetCard())
     //var theCard = JSON.parse(this.httpGetCard())
     var theCard = this.props.card;
-    var fullExpansionObj = theCard['expansions'][theCard['expansions'].length - 1]
-    var newestExpansion = fullExpansionObj.substr(0, fullExpansionObj.indexOf(' #'));
-    var newestImage = theCard['imageNames'][theCard['imageNames'].length - 1];
-    var newestExpansionNumber = fullExpansionObj.substr(fullExpansionObj.indexOf(' #') + 2);
+    var newestExpansion = theCard['expansions']['name'];
+    var newestImage = theCard['expansions'][0]['expansion']['name'].toLowerCase() + '-' + theCard['expansions'][0]['number'];
+    //var fullExpansionObj = theCard['expansions'][theCard['expansions'].length - 1]
+    //var newestExpansion = fullExpansionObj.substr(0, fullExpansionObj.indexOf(' #'));
+    //var newestImage = theCard['imageNames'][theCard['imageNames'].length - 1];
+    var newestExpansionNumber = theCard['expansions'][0]['number'];
 
     return (
       <div>
         {theCard.name}
         <br/>
-        {theCard['expansions'][theCard['expansions'].length - 1]}
+        {newestExpansionNumber}
         <br/>
         <Link to={'/cards/' + newestExpansion + '/' + newestExpansionNumber}>
           <img src={ this.getImageString(newestImage) } alt={ 'test' } width='250' height='350'/>
