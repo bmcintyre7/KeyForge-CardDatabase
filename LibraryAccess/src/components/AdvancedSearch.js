@@ -31,6 +31,7 @@ class AdvancedSearch extends React.Component {
     this.getImageString = this.getImageString.bind(this)
     this.httpGetHouses = this.httpGetHouses.bind(this);
     this.httpGetKeywords = this.httpGetKeywords.bind(this);
+    this.httpGetTypes = this.httpGetTypes.bind(this);
     this.makeTextSearchField = this.makeTextSearchField.bind(this);
     this.makeComparisonSearchField = this.makeComparisonSearchField.bind(this);
     this.makeChecklistSearchField = this.makeChecklistSearchField.bind(this);
@@ -51,6 +52,13 @@ class AdvancedSearch extends React.Component {
 
   httpGetKeywords() {
     var theUrl = 'http://localhost:7230/keywords';
+    var xmlHttp = createCORSRequest('GET', theUrl)
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+  }
+
+  httpGetTypes() {
+    var theUrl = 'http://localhost:7230/types';
     var xmlHttp = createCORSRequest('GET', theUrl)
     xmlHttp.send(null);
     return xmlHttp.responseText;
@@ -132,7 +140,7 @@ class AdvancedSearch extends React.Component {
 
       display.push((
         //<Link to={'/cards/house/' + houses[i]}>
-        <div key={'checkbox-' + slugifiedLabel + '-' + i} className='col-3 px-0 mx-3'>
+        <div key={'checkbox-' + slugifiedLabel + '-' + i} className='mx-2 px-0 displayInline'>
           <label className='align-middle m-0 p-0'><input className='align-middle mr-1' type='checkbox' value=''
                                                          id={slugifiedOption + '_Value'}/>{options[i]}</label>
         </div>
@@ -148,13 +156,11 @@ class AdvancedSearch extends React.Component {
             {label}:
           </div>
         </div>
-        <div className='col-6 text-center mx-0 px-0'>
+        <div className='col-6 text-center displayInline mx-0 px-0'>
           <div className='px-0 mx-0 py-2 rounded minWidth-400' >
-            <div className='row h-100 mx-0'>
               {display}
               <br/>
-              <span className='tinyLabel float-left mx-3'>{disclaimer}</span>
-            </div>
+              <span className='tinyLabel text-center mx-3'>{disclaimer}</span>
           </div>
         </div>
         <div className='col-2' />
@@ -166,6 +172,7 @@ class AdvancedSearch extends React.Component {
     var queryString = '?';
     var keywordNames = this.httpGetKeywords().split(', ');
     var houseNames = this.httpGetHouses().split(', ');
+    var typeNames = this.httpGetTypes().split(', ');
     var name = $('#name_Value').val();
     var text = $('#text_Value').val();
     var artist = $('#artist_Value').val();
@@ -189,6 +196,14 @@ class AdvancedSearch extends React.Component {
       rarities.push('Uncommon');
     if ($('#rare_Value').is(":checked"))
       rarities.push('Rare');
+
+    var types = new Array();
+    for (var i = 0; i < typeNames.length; ++i) {
+      var value = $('#'+ this.slugify(typeNames[i]) +'_Value').is(":checked");
+      if (value)
+        types.push(typeNames[i]);
+    }
+
     var aember = new Array (
       $('#aember_Select').val(),
       $('#aember_Value').val()
@@ -207,7 +222,7 @@ class AdvancedSearch extends React.Component {
       if (value)
         keywords.push(keywordNames[i]);
     }
-    // TODO: Traits/Type since those should be tag style input and that's not implemented yet
+    // TODO: Traits since those should be tag style input and that's not implemented yet
 
     if (name != '')
       queryString += (queryString.length != 1 ? '&' : '') + 'name=' + name;
@@ -226,6 +241,13 @@ class AdvancedSearch extends React.Component {
 
     for (var i = 0; i < rarities.length; ++i)
       queryString += (queryString.length != 1 ? '&' : '') + 'rarities=' + rarities[i];
+
+    for (var i = 0; i < types.length; ++i)
+      queryString += (queryString.length != 1 ? '&' : '') + 'types=' + types[i];
+
+    if (aember[1] != '') {
+      queryString += (queryString.length != 1 ? '&' : '') + 'aember=' + aember[0] + aember[1];
+    }
 
     this.searchQueryString = queryString;
 
@@ -247,6 +269,9 @@ class AdvancedSearch extends React.Component {
       ));
     var keywords = this.httpGetKeywords().split(', ');
     keywords.sort();
+
+    var types = this.httpGetTypes().split(', ');
+    types.sort();
 
     console.log (this.state.toResults);
 
@@ -278,16 +303,16 @@ class AdvancedSearch extends React.Component {
                 </div>
             </div>
             <div className='col-6 text-center displayInline mx-0 px-0'>
-              <div className='px-0 mx-0 py-2 rounded minWidth-400' >
+              <div className='p-0 m-0 rounded minWidth-400' >
                 {displayHouses}
                 <br/>
-                <span className='tinyLabel float-left mx-3'>{'Select each house that the cards must be.'}</span>
+                <span className='tinyLabel text-center mx-3'>{'Select each house that the cards may be.'}</span>
               </div>
             </div>
             <div className='col-2' />
           </div>
           <br/>
-          {this.makeTextSearchField('Card Type')}
+          {this.makeChecklistSearchField('Card Type', types, 'Select each type the cards may be.' )}
           <br/>
           {this.makeTextSearchField('Text')}
           <br/>
@@ -301,7 +326,7 @@ class AdvancedSearch extends React.Component {
           <br/>
           {this.makeTextSearchField('Traits')}
           <br/>
-          {this.makeChecklistSearchField('Rarity', ['Common', 'Uncommon', 'Rare'], 'Select each rarity that the cards must be.')}
+          {this.makeChecklistSearchField('Rarity', ['Common', 'Uncommon', 'Rare'], 'Select each rarity that the cards may be.')}
           <br/>
           {this.makeTextSearchField('Artist')}
           <br/>

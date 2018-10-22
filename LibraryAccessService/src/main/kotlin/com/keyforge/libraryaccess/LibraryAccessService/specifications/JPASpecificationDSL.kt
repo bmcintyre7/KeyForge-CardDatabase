@@ -1,5 +1,6 @@
 package com.keyforge.libraryaccess.LibraryAccessService.specifications
 
+import com.keyforge.libraryaccess.LibraryAccessService.data.House
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.jpa.domain.Specifications
 import javax.persistence.criteria.*
@@ -52,7 +53,6 @@ fun <T, R : Collection<*>> KProperty1<T, R?>.isEmpty() = spec { isEmpty(it) }
 fun <T, R : Collection<*>> KProperty1<T, R?>.isNotEmpty() = spec { isNotEmpty(it) }
 fun <T, E, R : Collection<E>> KProperty1<T, R?>.isMember(elem: E) = spec { isMember(elem, it) }
 fun <T, E, R : Collection<E>> KProperty1<T, R?>.isNotMember(elem: E) = spec { isNotMember(elem, it) }
-fun <T, E, R : Collection<E>> KProperty1<T, R?>.`contains`(elem: E) = spec { contains(elem) }
 
 // Strings
 fun <T> KProperty1<T, String?>.like(x: String): Specifications<T> = spec { like(it, x) }

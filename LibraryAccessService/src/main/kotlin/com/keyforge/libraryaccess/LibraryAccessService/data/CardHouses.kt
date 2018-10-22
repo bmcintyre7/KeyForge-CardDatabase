@@ -1,6 +1,7 @@
 package com.keyforge.libraryaccess.LibraryAccessService.data
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import org.hibernate.annotations.BatchSize
 import javax.persistence.*
 
 @Entity
@@ -12,8 +13,10 @@ data class CardHouses (
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cardId")
+    @BatchSize(size=50)
     val card: Card,
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "houseId")
+    @BatchSize(size=50)
     val house: House
 )

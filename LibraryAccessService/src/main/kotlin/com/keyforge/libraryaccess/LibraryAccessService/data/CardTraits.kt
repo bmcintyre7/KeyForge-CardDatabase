@@ -1,6 +1,7 @@
 package com.keyforge.libraryaccess.LibraryAccessService.data
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import org.hibernate.annotations.BatchSize
 import javax.persistence.*
 
 @Entity
@@ -12,8 +13,10 @@ data class CardTraits (
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cardId")
+    @BatchSize(size=50)
     val card: Card,
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "traitId")
+    @BatchSize(size=50)
     val trait: Trait
 )

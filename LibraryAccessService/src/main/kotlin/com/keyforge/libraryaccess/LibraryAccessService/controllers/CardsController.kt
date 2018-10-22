@@ -1,21 +1,18 @@
 package com.keyforge.libraryaccess.LibraryAccessService.controllers
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.JsonSerializer
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
 import com.keyforge.libraryaccess.LibraryAccessService.data.*
 import com.keyforge.libraryaccess.LibraryAccessService.repositories.*
 import com.keyforge.libraryaccess.LibraryAccessService.responses.CardBody
-import com.keyforge.libraryaccess.LibraryAccessService.responses.CardListBody
 import com.keyforge.libraryaccess.LibraryAccessService.responses.RarityBody
 import com.keyforge.libraryaccess.LibraryAccessService.specifications.CardQuery
 import org.springframework.web.bind.annotation.*
 import com.fasterxml.jackson.module.kotlin.*
-import java.lang.Exception
+import com.keyforge.libraryaccess.LibraryAccessService.responses.DetailedCardBody
 import java.text.Normalizer
-import kotlinx.serialization.json.JSON
+import org.modelmapper.ModelMapper
+import org.springframework.beans.factory.annotation.Autowired
+import java.util.stream.Collectors
 
 
 @RestController
@@ -31,7 +28,7 @@ class CardsController (
         private val keywordRepository: KeywordRepository,
         private val houseRepository: HouseRepository,
         private val traitRepository: TraitRepository
-
+        //private val modelMapper: ModelMapper
 ) {
     //@RequestMapping(value = "/cards", method = [RequestMethod.POST])
     //fun postCard(@RequestBody card : CardBody) : String {
@@ -138,22 +135,22 @@ class CardsController (
     //}
 
     @RequestMapping(value = "/cards/{expansion}/{id}", method = [RequestMethod.GET])
-    fun getCardByNumber(@PathVariable("expansion") exp: String, @PathVariable("id") id: Int) : CardBody? {
+    fun getCardByNumber(@PathVariable("expansion") exp: String, @PathVariable("id") id: Int) : DetailedCardBody? {
         val expansions = cardExpansionsRepository.findByNumber(Integer.toString(id))
         for (cardExpansion in expansions) {
             if (cardExpansion.expansion.name.toLowerCase() == exp.toLowerCase())
-                return cardToCardBody(cardRepository.findById(cardExpansion.card.id!!).get())
+                return cardRepository.findById(cardExpansion.card.id!!).get().toDetailedCardBody()
         }
         return null
     }
 
     @RequestMapping(value = "/cards/house/{house}", method = [RequestMethod.GET])
-    fun getCardsByHouse(@PathVariable("house") house: String): List<CardBody> {
+    fun getCardsByHouse(@PathVariable("house") house: String): List<DetailedCardBody> {
         val theHouse = houseRepository.findByName(house)
         val theCardHouses = cardHousesRepository.findByHouseId(theHouse.id!!)
-        val responseData = mutableListOf<CardBody>()
+        val responseData = mutableListOf<DetailedCardBody>()
         for (cardHouse in theCardHouses) {
-            responseData.add(cardToCardBody(cardHouse.card))
+            responseData.add(cardHouse.card.toDetailedCardBody())
         }
         return responseData
     }
@@ -166,26 +163,86 @@ class CardsController (
                  @RequestParam(value = "power", required = false) power: String?,
                  @RequestParam(value = "armor", required = false) armor: String?,
                  @RequestParam(value = "artist", required = false) artist: String?,
-                 @RequestParam(value = "type", required = false) types: MutableList<String>?,
+                 @RequestParam(value = "types", required = false) types: MutableList<String>?,
                  @RequestParam(value = "keywords", required = false) keywords: MutableList<String>?,
                  @RequestParam(value = "traits", required = false) traits: MutableList<String>?,
                  @RequestParam(value = "houses", required = false) houses: MutableList<String>?,
                  @RequestParam(value = "rarities", required = false) rarities: MutableList<String>?) : ByteArray {
         // TODO: This needs optimized, a lot.
         var queryRarities = mutableListOf<Rarity>()
+        var queryTypes = mutableListOf<Type>()
+        var queryHouses = mutableListOf<House>()
+        var queryKeywords = mutableListOf<Keyword>()
         if (null != rarities)
             for (rarity in rarities) {
                 queryRarities.add(rarityRepository.findByName(rarity))
             }
+        if (null != types)
+            for (type in types) {
+                queryTypes.add(typeRepository.findByName(type))
+            }
+        if (null != houses)
+            for (house in houses) {
+                queryHouses.add(houseRepository.findByName(house))
+            }
+        if (null != keywords)
+            for (keyword in keywords) {
+                val kw = keywordRepository.findByName(keyword)
+                //val matches = cardKeywordsRepository.findByKeywordId(kw.id!!)
+                //for (match in matches)
+                    queryKeywords.add(kw)
+            }
 
-        val query = CardQuery(name = name, types = types, rarities = queryRarities, text = text)
+        var aemberValue = mutableMapOf<String, String>()
+        if (null != aember) {
+            if (aember.contains(">="))
+                aemberValue.put("GTE", aember.substring(2))
+            else if (aember.contains(">"))
+                aemberValue.put("GT", aember.substring(1))
+            else if (aember.contains("<="))
+                aemberValue.put("LTE", aember.substring(2))
+            else if (aember.contains("<"))
+                aemberValue.put("LT", aember.substring(1))
+            else if (aember.contains("="))
+                aemberValue.put("E", aember.substring(1))
+        }
+        
+        var powerValue = mutableMapOf<String, String>()
+        if (null != power) {
+            if (power.contains(">="))
+                powerValue.put("GTE", power.substring(2))
+            else if (power.contains(">"))
+                powerValue.put("GT", power.substring(1))
+            else if (power.contains("<="))
+                powerValue.put("LTE", power.substring(2))
+            else if (power.contains("<"))
+                powerValue.put("LT", power.substring(1))
+            else if (power.contains("="))
+                powerValue.put("E", power.substring(1))
+        }
+        
+        var armorValue = mutableMapOf<String, String>()
+        if (null != armor) {
+            if (armor.contains(">="))
+                armorValue.put("GTE", armor.substring(2))
+            else if (armor.contains(">"))
+                armorValue.put("GT", armor.substring(1))
+            else if (armor.contains("<="))
+                armorValue.put("LTE", armor.substring(2))
+            else if (armor.contains("<"))
+                armorValue.put("LT", armor.substring(1))
+            else if (armor.contains("="))
+                armorValue.put("E", armor.substring(1))
+        }
+
+        val query = CardQuery(name = name, types = queryTypes, rarities = queryRarities, text = text, houses = queryHouses, keywords = queryKeywords, aember = aemberValue, power = powerValue, armor = armorValue)
         val results = cardRepository.findAll(query.toSpecification())
 
         val mapper = jacksonObjectMapper()
                 .registerKotlinModule()
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
-
-        return mapper.writeValueAsBytes(results)
+        val l = results.stream().map { card -> card.toCardBody() }.collect(Collectors.toList())
+        return mapper.writeValueAsBytes(l)
        //var filteredCards = CardListBody(mutableListOf())
 
        //for (card in results) {
@@ -274,63 +331,6 @@ class CardsController (
         //}
 
         //return filteredCards
-    }
-
-    fun cardToCardBody(card: Card): CardBody {
-        //val cardExpansions = cardExpansionsRepository.findByCardId(card.id!!)
-        //val cardHouses = cardHousesRepository.findByCardId(card.id!!)
-        //val cardKeywords = cardKeywordsRepository.findByCardId(card.id!!)
-        //val cardTraits = cardTraitsRepository.findByCardId(card.id!!)
-
-        var expansions = mutableListOf<String>()
-        var imageNames = mutableListOf<String>()
-        var houses = mutableListOf<String>()
-        var keywords = mutableListOf<String>()
-        var traits = mutableListOf<String>()
-
-        for (expansion in card.expansions) {
-            expansions.add(expansion.expansion.name + " #" + expansion.number)
-            imageNames.add(slugify(expansion.expansion.name) + "-" + expansion.number)
-        }
-
-        for (house in card.houses) {
-            houses.add(house.name)
-        }
-
-        for (keyword in card.keywords) {
-            keywords.add(keyword.name)
-        }
-
-        for (trait in card.traits) {
-            traits.add(trait.name)
-        }
-
-        return CardBody(
-            card.name,
-            card.type.name,
-            card.text,
-            card.aember,
-            card.armor,
-            card.power,
-            card.rarity.name,
-            card.artist,
-            imageNames,
-            expansions,
-            houses,
-            keywords,
-            traits
-        )
-    }
-
-    fun raritiesToRarityBodies(rarities: MutableList<String>?): MutableList<RarityBody>? {
-        if(rarities == null)
-            return null
-
-        var rarityBodies = mutableListOf<RarityBody>()
-        for (rarity in rarities)
-            rarityBodies.add(RarityBody(rarity))
-
-        return rarityBodies
     }
 
     fun slugify(word: String, replacement: String = "-") = Normalizer
