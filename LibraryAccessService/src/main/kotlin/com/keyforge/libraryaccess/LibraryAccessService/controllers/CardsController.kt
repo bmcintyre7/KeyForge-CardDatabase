@@ -168,7 +168,7 @@ class CardsController (
                  @RequestParam(value = "traits", required = false) traits: MutableList<String>?,
                  @RequestParam(value = "houses", required = false) houses: MutableList<String>?,
                  @RequestParam(value = "rarities", required = false) rarities: MutableList<String>?) : ByteArray {
-        // TODO: This needs optimized, a lot.
+        // TODO: Traits, further optimization.
         var queryRarities = mutableListOf<Rarity>()
         var queryTypes = mutableListOf<Type>()
         var queryHouses = mutableListOf<House>()
@@ -187,10 +187,7 @@ class CardsController (
             }
         if (null != keywords)
             for (keyword in keywords) {
-                val kw = keywordRepository.findByName(keyword)
-                //val matches = cardKeywordsRepository.findByKeywordId(kw.id!!)
-                //for (match in matches)
-                    queryKeywords.add(kw)
+                queryKeywords.add(keywordRepository.findByName(keyword))
             }
 
         var aemberValue = mutableMapOf<String, String>()
