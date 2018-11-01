@@ -7,12 +7,16 @@ buildscript {
 	repositories {
 		jcenter()
 		mavenCentral()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
 		classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
 		classpath("org.jetbrains.kotlin:kotlin-noarg:$kotlinVersion")
+		classpath('gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.20.1')
 	}
 }
 
@@ -23,10 +27,12 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
+apply plugin: 'com.palantir.docker'
 
-group = 'com.keyforge.libraryaccess'
+group = 'billmcintyre'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
+
 compileKotlin {
 	kotlinOptions {
 		freeCompilerArgs = ["-Xjsr305=strict"]
@@ -53,9 +59,7 @@ dependencies {
 	testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion"
 
 	// Spring Dependencies
-	compile("org.springframework.boot:spring-boot-starter-web") {
-		exclude module: "spring-boot-starter-tomcat"
-	}
+	compile("org.springframework.boot:spring-boot-starter-web")
 	compile "org.springframework.boot:spring-boot-starter-jetty"
 	compile "org.springframework.boot:spring-boot-starter-data-jpa"
 	compile "org.springframework.data:spring-data-jpa"
@@ -86,4 +90,21 @@ dependencies {
 
 	// Gson Dependencies
 	compile "com.google.code.gson:gson:2.8.0"
+}
+
+bootJar {
+	baseName = 'library-access-service'
+	version =  '0.1.6'
+}
+
+task unpack(type: Copy) {
+	dependsOn bootJar
+	from(zipTree(tasks.bootJar.outputs.files.singleFile))
+	into("build/dependency")
+}
+
+docker {
+	name "${project.group}/${bootJar.baseName}:${bootJar.version}"
+	copySpec.from(tasks.unpack.outputs).into("dependency")
+	buildArgs(['DEPENDENCY': "dependency"])
 }
