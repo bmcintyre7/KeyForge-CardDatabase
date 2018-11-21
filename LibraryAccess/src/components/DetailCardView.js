@@ -41,7 +41,7 @@ class DetailCardView extends React.Component {
     let theCard = JSON.parse(result);
     return (
       <div>
-        <img className={'displayInline'} src={ this.getImageString(expansionId, cardId) } alt={ 'test' } width='250' height='350'/>
+        <img className={'displayInline'} src={ this.getImageString(expansionId, cardId) } alt={ 'test' } border="5" width='250' height='350'/>
         <div className={'displayInline mx-3'}>
           <div>{theCard.name}</div>
           <div>{theCard.houses[0]}</div>
