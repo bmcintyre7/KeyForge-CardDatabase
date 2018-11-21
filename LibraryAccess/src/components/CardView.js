@@ -55,7 +55,7 @@ class CardView extends React.Component {
         {newestExpansionNumber}
         <br/>
         <Link to={'/cards/' + newestExpansion + '/' + newestExpansionNumber}>
-          <img src={ this.getImageString(newestImage) } alt={ 'test' } width='250' height='350'/>
+          <img src={ this.getImageString(newestImage) } alt={ 'test' } border="5" width='250' height='350'/>
         </Link>
       </div>
     );
