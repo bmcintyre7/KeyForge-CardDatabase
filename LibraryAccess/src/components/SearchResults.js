@@ -51,7 +51,20 @@ class SearchResults extends React.Component {
 
     return (
       <div>
-        { display }
+        <div className='row h-100 justify-content-center align-items-center'>
+          <div className='col-3'/>
+          <div className='col-6 text-center mb-5'>
+            <img src={'images/banner/labanner.png'} width={'75%'}/>
+          </div>
+          <div className='col-3'/>
+        </div>
+        <div className='row h-100 justify-content-center align-items-center'>
+          <div className='col-2'/>
+          <div className='col-8 text-center'>
+            { display }
+          </div>
+          <div className='col-2'/>
+        </div>
       </div>
     );
   }

@@ -11,6 +11,8 @@ data class CardQuery(
         val houses: MutableList<House>? = null,
         val keywords: MutableList<Keyword>? = null,
         val rarities: MutableList<Rarity>? = null,
+        val traitsAnd: MutableList<Trait>? = null,
+        val traitsOr: MutableList<Trait>? = null,
         val aember: Map<String, String>,
         val power: Map<String, String>,
         val armor: Map<String, String>,
@@ -26,6 +28,18 @@ data class CardQuery(
 
     fun hasTypeIn(types: List<Type>?): Specifications<Card>? = types?.let {
         Card::type.`in`(types)
+    }
+
+    fun hasTraitIn(traits: List<Trait>?): Specifications<Card>? = traits?.let {
+        or ( traits.map( ::hasTrait ))
+    }
+
+    fun hasTraits(traits: List<Trait>?): Specifications<Card>? = traits?.let {
+        and ( traits.map( ::hasTrait ))
+    }
+
+    fun hasTrait(trait: Trait): Specifications<Card>? = trait?.let {
+        where { equal(it.join(Card::traits).get(CardTraits::trait), trait)}
     }
 
     fun hasRarityIn(rarities: List<Rarity>?): Specifications<Card>? = rarities?.let {
@@ -119,6 +133,8 @@ data class CardQuery(
         hasKeywords(keywords),
         hasRarityIn(rarities),
         hasHouseIn(houses),
+        hasTraitIn(traitsOr),
+        hasTraits(traitsAnd),
         hasAemberGTE(aember["GTE"]),
         hasAemberGT(aember["GT"]),
         hasAemberLTE(aember["LTE"]),

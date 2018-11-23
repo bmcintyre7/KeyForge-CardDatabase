@@ -30,6 +30,10 @@ class CardsController (
         private val traitRepository: TraitRepository
         //private val modelMapper: ModelMapper
 ) {
+
+    val mapper = jacksonObjectMapper()
+            .registerKotlinModule()
+            .setSerializationInclusion(JsonInclude.Include.NON_NULL)
     //@RequestMapping(value = "/cards", method = [RequestMethod.POST])
     //fun postCard(@RequestBody card : CardBody) : String {
 //
@@ -165,7 +169,8 @@ class CardsController (
                  @RequestParam(value = "artist", required = false) artist: String?,
                  @RequestParam(value = "types", required = false) types: MutableList<String>?,
                  @RequestParam(value = "keywords", required = false) keywords: MutableList<String>?,
-                 @RequestParam(value = "traits", required = false) traits: MutableList<String>?,
+                 @RequestParam(value = "traits", required = false) traits: String?,
+                 @RequestParam(value = "traitsOr", required = false) traitsOr: String?,
                  @RequestParam(value = "houses", required = false) houses: MutableList<String>?,
                  @RequestParam(value = "rarities", required = false) rarities: MutableList<String>?) : ByteArray {
         // TODO: Traits, further optimization.
@@ -173,6 +178,9 @@ class CardsController (
         var queryTypes = mutableListOf<Type>()
         var queryHouses = mutableListOf<House>()
         var queryKeywords = mutableListOf<Keyword>()
+        var queryOrTraits = mutableListOf<Trait>()
+        var queryAndTraits = mutableListOf<Trait>()
+
         if (null != rarities)
             for (rarity in rarities) {
                 queryRarities.add(rarityRepository.findByName(rarity))
@@ -232,12 +240,24 @@ class CardsController (
                 armorValue.put("E", armor.substring(1))
         }
 
-        val query = CardQuery(name = name, types = queryTypes, rarities = queryRarities, text = text, houses = queryHouses, keywords = queryKeywords, aember = aemberValue, power = powerValue, armor = armorValue)
-        val results = cardRepository.findAll(query.toSpecification())
+        var traitArray = listOf<String>()
+        if (null != traits && null != traitsOr) {
+            traitArray = traits.split(", ").toList()
 
-        val mapper = jacksonObjectMapper()
-                .registerKotlinModule()
-                .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            for (t in traitArray) {
+                val theTrait = traitRepository.findByName(t)
+
+                if ("true" == traitsOr.toLowerCase())
+                    queryOrTraits.add(theTrait)
+                else
+                    queryAndTraits.add(theTrait)
+            }
+        }
+
+        val query = CardQuery(name = name, types = queryTypes, rarities = queryRarities, text = text, houses = queryHouses, keywords = queryKeywords, traitsOr = queryOrTraits, traitsAnd = queryAndTraits, aember = aemberValue, power = powerValue, armor = armorValue)
+        val results = cardRepository.findAll(query.toSpecification())
+        results.sortBy({ resultSorter(it) })
+
         val l = results.stream().map { card -> card.toCardBody() }.collect(Collectors.toList())
         return mapper.writeValueAsBytes(l)
        //var filteredCards = CardListBody(mutableListOf())
@@ -329,6 +349,8 @@ class CardsController (
 
         //return filteredCards
     }
+
+    fun resultSorter(c: Card): Int = c.expansions[0].number.toInt()
 
     fun slugify(word: String, replacement: String = "-") = Normalizer
             .normalize(word, Normalizer.Form.NFD)

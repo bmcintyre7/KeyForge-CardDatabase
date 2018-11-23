@@ -50,13 +50,11 @@ class CardView extends React.Component {
 
     return (
       <div>
-        {theCard.name}
-        <br/>
-        {newestExpansionNumber}
-        <br/>
         <Link to={'/cards/' + newestExpansion + '/' + newestExpansionNumber}>
-          <img src={ this.getImageString(newestImage) } alt={ 'test' } border="5" width='250' height='350'/>
+          <img className={'imageBorder'} src={ this.getImageString(newestImage) } alt={ 'test' } width='250' height='350'/>
         </Link>
+      <br/>
+        {theCard.name + " - " + newestExpansion + " #" + newestExpansionNumber}
       </div>
     );
   }

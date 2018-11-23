@@ -17,22 +17,26 @@ import javax.persistence.*
 data class Card (
         @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
+
     val id: Int? = null,
         val name: String = "",
         @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "typeId")
     val type: Type,
-        val text: String = "",
-        val aember: String? = null,
-        val power: String? = null,
-        val armor: String? = null,
-        @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
+
+    val text: String = "",
+    val aember: String? = null,
+    val power: String? = null,
+    val armor: String? = null,
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "rarityId")
     val rarity: Rarity,
         @OneToMany(fetch = FetchType.LAZY, mappedBy = "card")
     @BatchSize(size=500)
     val expansions: List<CardExpansions>,
-        @OneToMany(fetch = FetchType.LAZY)//, targetEntity = CardHouses::class)
+
+    @OneToMany(fetch = FetchType.LAZY)//, targetEntity = CardHouses::class)
     @JoinTable(
             name = "cardHouses",
             joinColumns = [JoinColumn(name = "cardId")],
@@ -40,15 +44,17 @@ data class Card (
     )
     @BatchSize(size=500)
     val houses: List<House>,
-        @OneToMany(fetch = FetchType.LAZY)//, targetEntity = CardTraits::class)
-    @JoinTable(
-            name = "cardTraits",
-            joinColumns = [JoinColumn(name = "cardId")],
-            inverseJoinColumns = [JoinColumn(name = "traitId")]
-    )
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "card")//, targetEntity = CardTraits::class)
+//    @JoinTable(
+//            name = "cardTraits",
+//            joinColumns = [JoinColumn(name = "cardId")],
+//            inverseJoinColumns = [JoinColumn(name = "traitId")]
+//    )
     @BatchSize(size=500)
-    val traits: List<Trait>,
-        @OneToMany(fetch = FetchType.LAZY, mappedBy = "card")//, targetEntity = CardKeywords::class)
+    val traits: List<CardTraits>,
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "card")//, targetEntity = CardKeywords::class)
     @BatchSize(size=500)
     @JsonIgnore
     val keywords: List<CardKeywords>,
@@ -65,7 +71,7 @@ data class Card (
         expansions = expansions.stream().map { cardExp -> cardExp.expansion.name + " #" + cardExp.number }.collect(Collectors.toList()),
         imageNames = expansions.stream().map { cardExp -> cardExp.expansion.name.toLowerCase() + "-" + cardExp.number }.collect(Collectors.toList()),
         houses = houses.stream().map { house -> house.name }.collect(Collectors.toList()),
-        traits = traits.stream().map { trait -> trait.name }.collect(Collectors.toList()),
+        traits = traits.stream().map { trait -> trait.trait.name }.collect(Collectors.toList()),
         keywords = keywords.stream().map { keyword -> keyword.keyword.name }.collect(Collectors.toList()),
         artist = artist
     )

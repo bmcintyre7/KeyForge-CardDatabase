@@ -39,7 +39,7 @@ data class DetailedCardBody (
             }
 
             for (trait in from.traits) {
-                traits.add(trait.name)
+                traits.add(trait.trait.name)
             }
 
             DetailedCardBody(from.name, from.type.name, from.text, from.aember, from.armor, from.power, from.rarity.name, from.artist, imageNames, expansions, houses, keywords, traits)

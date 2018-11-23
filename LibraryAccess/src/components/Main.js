@@ -3,11 +3,11 @@ require('styles/App.css');
 
 import React from 'react';
 const supportsHistory = 'pushState' in window.history
-import {BrowserRouter, Route, Switch, BrowserHistory} from 'react-router-dom';
-import { Home } from './Home'
+import {BrowserRouter as Router, Route, Switch, BrowserHistory} from 'react-router-dom';
+//import { Home } from './OldHome'
 import { DetailCardView } from './DetailCardView'
 import { ExpansionView } from './ExpansionView'
-import { AdvancedSearch} from './AdvancedSearch'
+import { Home} from './Home'
 import { SearchResults} from './SearchResults';
 
 class AppController extends React.Component {
@@ -25,15 +25,14 @@ class AppController extends React.Component {
     //<Route path='/walkthrough/' component={Walkthrough}/>
 
     return (
-      <BrowserRouter forceRefresh={!supportsHistory} history={BrowserHistory}>
+      <Router>
         <Switch>
           <Route exact path='/' component={Home}/>
-          <Route exact path='/advanced' component={AdvancedSearch}/>
           <Route exact path='/cards/:expansionName' component={ExpansionView}/>
           <Route exact path='/cards/:expansionName/:cardId' component={DetailCardView}/>
           <Route exact path='/searchResults' component={SearchResults}/>
         </Switch>
-    </BrowserRouter>
+      </Router>
     );
   }
 }
