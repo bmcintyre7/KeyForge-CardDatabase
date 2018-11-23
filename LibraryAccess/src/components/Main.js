@@ -4,11 +4,10 @@ require('styles/App.css');
 import React from 'react';
 const supportsHistory = 'pushState' in window.history
 import {BrowserRouter as Router, Route, Switch, BrowserHistory} from 'react-router-dom';
-//import { Home } from './OldHome'
 import { DetailCardView } from './DetailCardView'
 import { ExpansionView } from './ExpansionView'
-import { Home} from './Home'
-import { SearchResults} from './SearchResults';
+import { Home } from './Home'
+import { SearchResults } from './SearchResults';
 
 class AppController extends React.Component {
   render() {

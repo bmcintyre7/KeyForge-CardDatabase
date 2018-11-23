@@ -142,7 +142,7 @@ class CardsController (
     fun getCardByNumber(@PathVariable("expansion") exp: String, @PathVariable("id") id: Int) : DetailedCardBody? {
         val expansions = cardExpansionsRepository.findByNumber(Integer.toString(id))
         for (cardExpansion in expansions) {
-            if (cardExpansion.expansion.name.toLowerCase() == exp.toLowerCase())
+            if (cardExpansion.expansion.abbreviation.toLowerCase() == exp.toLowerCase())
                 return cardRepository.findById(cardExpansion.card.id!!).get().toDetailedCardBody()
         }
         return null

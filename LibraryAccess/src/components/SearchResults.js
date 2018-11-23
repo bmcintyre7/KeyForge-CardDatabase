@@ -1,7 +1,8 @@
 import React from 'react';
 
-import {Link} from 'react-router-dom';
 import {CardView} from 'components/CardView';
+import {apiURL} from './Home'
+import {PageHeader} from "components/PageHeader";
 
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -26,12 +27,16 @@ class SearchResults extends React.Component {
     this.httpGetCards = this.httpGetCards.bind(this);
   }
 
+  componentDidMount() {
+    window.scrollTo(0,0);
+  }
+
   getImageString(houseName) {
     return '/images/houses/' + houseName + '.png';
   }
 
   httpGetCards() {
-    var theUrl = 'http://localhost:7230/cards' + this.props.location.state.query;
+    var theUrl = apiURL + '/cards' + this.props.location.state.query;
     var xmlHttp = createCORSRequest('GET', theUrl);
     xmlHttp.send(null);
     return xmlHttp.responseText;
@@ -51,13 +56,7 @@ class SearchResults extends React.Component {
 
     return (
       <div>
-        <div className='row h-100 justify-content-center align-items-center'>
-          <div className='col-3'/>
-          <div className='col-6 text-center mb-5'>
-            <img src={'images/banner/labanner.png'} width={'75%'}/>
-          </div>
-          <div className='col-3'/>
-        </div>
+        <PageHeader/>
         <div className='row h-100 justify-content-center align-items-center'>
           <div className='col-2'/>
           <div className='col-8 text-center'>

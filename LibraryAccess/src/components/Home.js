@@ -1,8 +1,11 @@
 import React from 'react';
 
-import {Link, Redirect} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import {DropdownButton, MenuItem} from 'react-bootstrap'
 import {AutoComplete} from 'components/AutoComplete';
+import {PageHeader} from './PageHeader'
+
+let apiURL = 'http://142.93.181.3:7001';
 
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -46,28 +49,28 @@ class Home extends React.Component {
   }
 
   httpGetHouses() {
-    var theUrl = 'http://localhost:7230/houses';
+    var theUrl = apiURL + '/houses';
     var xmlHttp = createCORSRequest('GET', theUrl)
     xmlHttp.send(null);
     return xmlHttp.responseText;
   }
 
   httpGetTraits() {
-    var theUrl = 'http://localhost:7230/traits';
+    var theUrl = apiURL + '/traits';
     var xmlHttp = createCORSRequest('GET', theUrl)
     xmlHttp.send(null);
     return xmlHttp.responseText;
   }
 
   httpGetKeywords() {
-    var theUrl = 'http://localhost:7230/keywords';
+    var theUrl = apiURL + '/keywords';
     var xmlHttp = createCORSRequest('GET', theUrl)
     xmlHttp.send(null);
     return xmlHttp.responseText;
   }
 
   httpGetTypes() {
-    var theUrl = 'http://localhost:7230/types';
+    var theUrl = apiURL + '/types';
     var xmlHttp = createCORSRequest('GET', theUrl)
     xmlHttp.send(null);
     return xmlHttp.responseText;
@@ -330,15 +333,9 @@ class Home extends React.Component {
 
     return (
       <div className='justify-content-center align-items-center text-center'>
-        <div className='fluid-container h-100 m-5 displayInline px-4 py-2'>
+        <PageHeader />
+        <div className='fluid-container h-100 m-5 displayInline px-4 pb-2'>
           <div className='row h-100 justify-content-center align-items-center'>
-            <div className='col-3'/>
-            <div className='col-6 h1 text-center'>
-              <div className='minWidth-400 mb-5'>
-                <img src={'images/banner/labanner.png'} width={'75%'}/>
-              </div>
-            </div>
-            <div className='col-3'/>
             <div className='col-3'/>
             <div className='col-6 text-center'>
               {this.makeTextSearchField(<span className='far fa-id-card fa-sm'><div className={'searchLabel displayInline pl-2'}>Name:</div></span>, 'Name')}
@@ -378,7 +375,10 @@ class Home extends React.Component {
               <br/>
               {this.makeTextSearchField(<span className='fas fa-paint-brush fa-sm'><div className={'searchLabel displayInline pl-2'}>Artist:</div></span>, 'Artist')}
               <br/>
-              <button className='btn' onClick={this.doSearch}>Search</button>
+              <div className={'row h-100 justify-content-center align-items-center'}>
+                <div className={'col-3'} />
+                <button className='btn' onClick={this.doSearch}>Search</button>
+              </div>
             </div>
             <div className='col-3'/>
           </div>
@@ -388,4 +388,4 @@ class Home extends React.Component {
   }
 }
 
-export {Home};
+export {Home, apiURL};

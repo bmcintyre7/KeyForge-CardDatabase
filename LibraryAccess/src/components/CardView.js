@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {Link} from 'react-router-dom';
+import {apiURL} from './Home'
 
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -30,7 +31,7 @@ class CardView extends React.Component {
   }
 
   httpGetCard() {
-    var theUrl = 'http://localhost:7230/cards/' + this.props.card;
+    var theUrl = apiURL + '/cards/' + this.props.card;
     var xmlHttp = createCORSRequest('GET', theUrl)
     //xmlHttp.open('GET', theUrl, false); // false for synchronous request
     xmlHttp.send(null);
