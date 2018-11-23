@@ -1,4 +1,6 @@
 import React from 'react';
+import {apiURL} from './Home'
+import {PageHeader} from "components/PageHeader";
 
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -30,7 +32,7 @@ class DetailCardView extends React.Component {
   }
 
   httpGetCard(expansion, cardId) {
-    let theUrl = 'http://localhost:7230/cards/' + expansion + '/' + cardId;
+    let theUrl = apiURL + '/cards/' + expansion + '/' + cardId;
     let xmlHttp = createCORSRequest('GET', theUrl);
     xmlHttp.send(null);
     return xmlHttp.responseText;
@@ -56,10 +58,10 @@ class DetailCardView extends React.Component {
     let theCard = JSON.parse(result);
     return (
       <div>
+        <PageHeader/>
         <div className='row h-100 justify-content-center align-items-center'>
           <div className='col-3'/>
           <div className='col-6 text-center mb-5 minWidth-400'>
-            <img src={'/images/banner/labanner.png'} width={'75%'}/>
             <img className={'displayInline imageBorder mr-2 mb-5'} src={ this.getImageString(expansionId, cardId) } alt={ 'test' } width='250' height='350'/>
               <div className={'displayInline mx-3'}>
                 <div className={'text-left'}><b>Name:</b> {theCard.name}</div>

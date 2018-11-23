@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {Link} from 'react-router-dom';
+import {apiURL} from './Home';
 
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -30,7 +31,7 @@ class SearchBox extends React.Component {
   }
 
   httpGetHouses() {
-    var theUrl = 'http://localhost:7230/houses';
+    var theUrl = apiURL + '/houses';
     var xmlHttp = createCORSRequest('GET', theUrl)
     xmlHttp.send(null);
     return xmlHttp.responseText;
