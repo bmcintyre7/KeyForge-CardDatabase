@@ -3,6 +3,8 @@ import React from 'react';
 import {CardView} from 'components/CardView';
 import {apiURL} from './Home'
 import {PageHeader} from "components/PageHeader";
+import {PageFooter} from "components/PageFooter";
+import {Link} from "react-router-dom";
 
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -48,22 +50,28 @@ class SearchResults extends React.Component {
     console.log(searchResults);
     console.log(searchResults.length);
     var display = new Array();
+
+    if (searchResults.length == 0)
+      display.push(<div>No results found :(</div>);
+
     for (var i = 0; i < searchResults.length; i++) {
       display.push((
-        <div key={'card-' + searchResults[i]['name']} className='displayInline mx-3 my-3'><CardView card={searchResults[i]}/></div>
-      ));
+        <div key={'card-' + searchResults[i]['name']} className='displayInline mx-3 my-3'><CardView card={searchResults[i]}/></div>));
     }
 
     return (
       <div>
-        <PageHeader/>
+        <PageHeader numResults={searchResults.length}/>
         <div className='row h-100 justify-content-center align-items-center'>
           <div className='col-2'/>
-          <div className='col-8 text-center'>
+          <div className='col-8 text-center' >
             { display }
+            <br/><br/>
+            <Link to={'/'} style={{ textDecoration: 'none', color: 'lightblue' }}>Search Again</Link>
           </div>
           <div className='col-2'/>
         </div>
+        <PageFooter/>
       </div>
     );
   }

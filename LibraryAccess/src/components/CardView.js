@@ -42,7 +42,7 @@ class CardView extends React.Component {
     //console.log(this.httpGetCard())
     //var theCard = JSON.parse(this.httpGetCard())
     var theCard = this.props.card;
-    var newestExpansion = theCard['expansions'][0]['name'];
+    var newestExpansion = theCard['expansions'][0]['abbreviation'];
     var newestImage = theCard['expansions'][0]['imageName'];
     //var fullExpansionObj = theCard['expansions'][theCard['expansions'].length - 1]
     //var newestExpansion = fullExpansionObj.substr(0, fullExpansionObj.indexOf(' #'));

@@ -19,7 +19,7 @@ data class CardQuery(
         val artist: String? = null
 ) {
     fun hasName(name: String?): Specifications<Card>? = name?.let {
-        Card::name.likeIgnoreCase(it)
+        Card::name.likeIgnoreCase("%" + name + "%")
     }
 
     fun hasText(text: String?): Specifications<Card>? = text?.let {

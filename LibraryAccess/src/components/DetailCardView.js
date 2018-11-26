@@ -1,6 +1,8 @@
 import React from 'react';
+import MetaTags from 'react-meta-tags'
 import {apiURL} from './Home'
 import {PageHeader} from "components/PageHeader";
+import {PageFooter} from "components/PageFooter";
 
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -27,8 +29,12 @@ class DetailCardView extends React.Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
+  componentDidMount() {
+    window.scrollTo(0,0);
+  }
+
   getImageString(expansion, number) {
-    return '/images/cards/' + expansion + '-' + number + '.jpg';
+    return '/images/cards/' + expansion.toLowerCase() + '-' + number + '.jpg';
   }
 
   httpGetCard(expansion, cardId) {
@@ -43,8 +49,8 @@ class DetailCardView extends React.Component {
   }
 
   submitForm() {
-      Email.send("bmcintyre@entrick.com",
-        "riek.account@gmail.com",
+      Email.send("errorreport@libraryaccess.net",
+        "errorreport@libraryaccess.net",
         "Error Report + " + window.location.href,
         "Error Description: " + $('#errorDescription').val(),
         {token:"15a3332b-48a1-4f31-9a1a-252beeafbd33"});
@@ -56,8 +62,15 @@ class DetailCardView extends React.Component {
     let expansionId = this.props.match.params.expansionName;
     let result = this.httpGetCard(expansionId, cardId);
     let theCard = JSON.parse(result);
+
+    document.getElementById('og-image').setAttribute('content', this.getImageString(expansionId, cardId));
+    document.getElementById('og-image').content = this.getImageString(expansionId, cardId);
+
     return (
       <div>
+        <MetaTags>
+        <meta id={'og-image'} property={'og:image'} name={'og:image'} content={this.getImageString(expansionId, cardId)} />
+        </MetaTags>
         <PageHeader/>
         <div className='row h-100 justify-content-center align-items-center'>
           <div className='col-3'/>
@@ -81,15 +94,16 @@ class DetailCardView extends React.Component {
           <div className={'col-3'} />
           <div className='row h-100 justify-content-center align-items-center'>
             <div className={'col-12'}>
-              <button type='button' id='formButton' className={'form-control'} onClick={this.toggleForm}>Report an error with this card</button>
+              <button type='button' id='formButton' className={'form-control btn'} onClick={this.toggleForm}>Report an error with this card</button>
               <form id='form1' className={'mt-3'}>
                 <b>Error Description:</b> <textarea id='errorDescription' className={'form-control'} name='firstName'></textarea>
                 <br/>
-                <button type='button' className={'form-control'} id='submit' onClick={this.submitForm}>Submit</button>
+                <button type='button' className={'form-control btn'} id='submit' onClick={this.submitForm}>Submit</button>
               </form>
             </div>
           </div>
         </div>
+        <PageFooter/>
       </div>
     );
   }

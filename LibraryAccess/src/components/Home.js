@@ -4,6 +4,7 @@ import {Redirect} from 'react-router-dom';
 import {DropdownButton, MenuItem} from 'react-bootstrap'
 import {AutoComplete} from 'components/AutoComplete';
 import {PageHeader} from './PageHeader'
+import {PageFooter} from './PageFooter'
 
 let apiURL = 'http://142.93.181.3:7001';
 
@@ -42,6 +43,11 @@ class Home extends React.Component {
     this.makeChecklistSearchField = this.makeChecklistSearchField.bind(this);
     this.doSearch = this.doSearch.bind(this);
     this.slugify = this.slugify.bind(this);
+    this.checkEnter = this.checkEnter.bind(this);
+  }
+
+  componentDidMount() {
+    window.scrollTo(0, 0);
   }
 
   getImageString(houseName) {
@@ -76,6 +82,15 @@ class Home extends React.Component {
     return xmlHttp.responseText;
   }
 
+  // Event fired when the user presses a key down
+  checkEnter = e => { {
+    const userInput = this.state.userInput;
+    // Update the user input and reset the rest of the state
+    if (e.keyCode === 13) {
+      this.doSearch();
+    }
+  } }
+
   makeTextSearchField(icon, label) {
     let slugifiedLabel = this.slugify(label);
 
@@ -90,7 +105,7 @@ class Home extends React.Component {
         <div className='col-6 text-center displayInline mx-0 px-0'>
           <div className='px-0 mx-0 minWidth-400'>
             <input type='text typeahead' data-provide='testData' className='form-control'
-                   id={slugifiedLabel + '_Value'}/>
+                   id={slugifiedLabel + '_Value'} onKeyDown={this.checkEnter}/>
           </div>
         </div>
         <div className='col-2'/>
@@ -203,7 +218,7 @@ class Home extends React.Component {
     );
   }
 
-  doSearch(user) {
+  doSearch() {
     var queryString = '?';
     var keywordNames = this.httpGetKeywords().split(', ');
     var houseNames = this.httpGetHouses().split(', ');
@@ -295,6 +310,14 @@ class Home extends React.Component {
       queryString += (queryString.length != 1 ? '&' : '') + 'aember=' + aember[0] + aember[1];
     }
 
+    if (power[1] != '') {
+      queryString += (queryString.length != 1 ? '&' : '') + 'power=' + power[0] + power[1];
+    }
+
+    if (armor[1] != '') {
+      queryString += (queryString.length != 1 ? '&' : '') + 'armor=' + armor[0] + armor[1];
+    }
+
     this.searchQueryString = queryString;
 
     console.log(rarities.length);
@@ -334,10 +357,10 @@ class Home extends React.Component {
     return (
       <div className='justify-content-center align-items-center text-center'>
         <PageHeader />
-        <div className='fluid-container h-100 m-5 displayInline px-4 pb-2'>
+        <div className='fluid-container h-100 displayInline px-4'>
           <div className='row h-100 justify-content-center align-items-center'>
             <div className='col-3'/>
-            <div className='col-6 text-center'>
+            <div className='col-6 text-center pr-5'>
               {this.makeTextSearchField(<span className='far fa-id-card fa-sm'><div className={'searchLabel displayInline pl-2'}>Name:</div></span>, 'Name')}
               <br/>
               <div className='row h-100 justify-content-center align-items-center'>
@@ -377,12 +400,13 @@ class Home extends React.Component {
               <br/>
               <div className={'row h-100 justify-content-center align-items-center'}>
                 <div className={'col-3'} />
-                <button className='btn' onClick={this.doSearch}>Search</button>
+                <button className='btn' id={'search'} onClick={this.doSearch}>Search</button>
               </div>
             </div>
             <div className='col-3'/>
           </div>
         </div>
+        <PageFooter/>
       </div>
     );
   }

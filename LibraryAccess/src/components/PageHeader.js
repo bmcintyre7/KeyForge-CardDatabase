@@ -3,16 +3,15 @@ import { Link, Redirect } from 'react-router-dom';
 
 
 class PageHeader extends React.Component {
-  render() { return (
-    <div className={'row h-100 justify-content-center align-items-center'}>
-      <div className={'col-3'} />
-      <div className={'col-6'} >
-        <Link to={'/'} style={{ textDecoration: 'none' }}>
-          <span className='topHeader' ><img src={'/images/banner/labanner.png'} className={'banner px-0 mx-0'}/></span>
+  render() {
+    var results = this.props.numResults;
+    return (
+      <nav className='navbar topHeader'>
+        <Link to={'/'} style={{ textDecoration: 'none', color: 'white'}}>
+          <i className='fas fa-book-open fa-lg mr-2'> </i><span className='navbar-brand mb-0 h1'>Library Access</span>
         </Link>
-      </div>
-      <div className={'col-3'} />
-    </div>
+        {results != null && <span className={'float-right'}>Found {results} results!</span>}
+      </nav>
   )}
 }
 
