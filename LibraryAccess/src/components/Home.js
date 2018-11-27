@@ -6,6 +6,7 @@ import {AutoComplete} from 'components/AutoComplete';
 import {PageHeader} from './PageHeader'
 import {PageFooter} from './PageFooter'
 import {createCORSRequest, apiURL} from 'shared/createCORSRequest';
+import IconTitle, { ICONS } from 'shared/IconTitle';
 
 class Home extends React.Component {
   state = {
@@ -340,13 +341,13 @@ class Home extends React.Component {
           <div className='row h-100 justify-content-center align-items-center'>
             <div className='col-3'/>
             <div className='col-6 text-center pr-5'>
-              {this.makeTextSearchField(<span className='far fa-id-card fa-sm'><div className={'searchLabel displayInline pl-2'}>Name:</div></span>, 'Name')}
+              {this.makeTextSearchField(<IconTitle faIcon={ICONS.ID_CARD} title='Name' />, 'Name')}
               <br/>
               <div className='row h-100 justify-content-center align-items-center'>
                 <div className='col-1'/>
                 <div className='col-2'>
                   <div className='searchLabel float-right'>
-                    <span className='fas fa-home fa-sm'><div className={'searchLabel displayInline pl-2'}>Houses:</div></span>
+                    <IconTitle faIcon={ICONS.HOME} title='Houses' solid />
                   </div>
                 </div>
                 <div className='col-6 text-center displayInline mx-0 px-0'>
@@ -359,23 +360,23 @@ class Home extends React.Component {
                 <div className='col-2'/>
               </div>
               <br/>
-              {this.makeChecklistSearchField(<span className='fas fa-fingerprint fa-sm'><div className={'searchLabel displayInline pl-2'}>Type:</div></span>, 'Type', types, 'Select each type the results may be.')}
+              {this.makeChecklistSearchField(<IconTitle faIcon={ICONS.FINGERPRINT} title='Type' solid />, 'Type', types, 'Select each type the results may be.')}
               <br/>
-              {this.makeTextSearchField(<span className='fas fa-align-justify fa-sm'><div className={'searchLabel displayInline pl-2'}>Text:</div></span>, 'Text')}
+              {this.makeTextSearchField(<IconTitle faIcon={ICONS.ALIGN_JUSTIFY} title='Text' solid />, 'Text')}
               <br/>
-              {this.makeComparisonSearchField(<span className='far fa-gem fa-sm'><div className={'searchLabel displayInline pl-2'}>Aember:</div></span>, 'Aember')}
+              {this.makeComparisonSearchField(<IconTitle faIcon={ICONS.GEM} title='Æmber' />, 'Aember')}
               <br/>
-              {this.makeComparisonSearchField(<span className='fas fa-dumbbell fa-sm'><div className={'searchLabel displayInline pl-2'}>Power:</div></span>, 'Power')}
+              {this.makeComparisonSearchField(<IconTitle faIcon={ICONS.DUMBBELL} title='Power' solid />, 'Power')}
               <br/>
-              {this.makeComparisonSearchField(<span className='fas fa-shield-alt fa-sm'><div className={'searchLabel displayInline pl-2'}>Armor:</div></span>, 'Armor')}
+              {this.makeComparisonSearchField(<IconTitle faIcon={ICONS.SHIELD_ALT} title='Armor' solid />, 'Armor')}
               <br/>
-              {this.makeChecklistSearchField(<span className='fas fa-key fa-sm'><div className={'searchLabel displayInline pl-2'}>Keywords:</div></span>, 'Keywords', keywords, 'Select each keyword that the results must have.')}
+              {this.makeChecklistSearchField(<IconTitle faIcon={ICONS.KEY} title='Keywords' solid />, 'Keywords', keywords, 'Select each keyword that the results must have.')}
               <br/>
-              {this.makeAutoCompleteSearchField(<span className='fas fa-list-ul fa-sm'><div className={'searchLabel displayInline pl-2'}>Traits:</div></span>, 'Traits', traits, 'Results must have all entered traits')}
+              {this.makeAutoCompleteSearchField(<IconTitle faIcon={ICONS.LIST_UI} title='Traits' solid />, 'Traits', traits, 'Results must have all entered traits')}
               <br/>
-              {this.makeChecklistSearchField(<span className='far fa-star fa-sm'><div className={'searchLabel displayInline pl-2'}>Rarity:</div></span>, 'Rarity', ['Common', 'Uncommon', 'Rare', 'Special'], 'Select each rarity that the results may be.')}
+              {this.makeChecklistSearchField(<IconTitle faIcon={ICONS.STAR} title='Rarity' />, 'Rarity', ['Common', 'Uncommon', 'Rare', 'Special'], 'Select each rarity that the results may be.')}
               <br/>
-              {this.makeTextSearchField(<span className='fas fa-paint-brush fa-sm'><div className={'searchLabel displayInline pl-2'}>Artist:</div></span>, 'Artist')}
+              {this.makeTextSearchField(<IconTitle faIcon={ICONS.PAINT_BRUSH} title='Artist' solid />, 'Artist')}
               <br/>
               <div className={'row h-100 justify-content-center align-items-center'}>
                 <div className={'col-3'} />
