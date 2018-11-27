@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Link} from 'react-router-dom';
-import {apiURL, createCORSRequest} from 'sources/createCORSRequest';
+import {apiURL, createCORSRequest} from 'shared/createCORSRequest';
 
 class SearchBox extends React.Component {
   constructor(props) {

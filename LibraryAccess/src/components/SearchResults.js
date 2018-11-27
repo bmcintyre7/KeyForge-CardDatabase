@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {CardView} from 'components/CardView';
-import {apiURL, createCORSRequest} from 'sources/createCORSRequest';
+import {apiURL, createCORSRequest} from 'shared/createCORSRequest';
 import {PageHeader} from "components/PageHeader";
 import {PageFooter} from "components/PageFooter";
 import {Link} from "react-router-dom";

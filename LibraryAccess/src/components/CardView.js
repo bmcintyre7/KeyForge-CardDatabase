@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Link} from 'react-router-dom';
-import {apiURL, createCORSRequest} from 'sources/createCORSRequest'
+import {apiURL, createCORSRequest} from 'shared/createCORSRequest'
 
 class CardView extends React.Component {
   constructor(props) {

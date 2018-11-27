@@ -5,7 +5,7 @@ import {DropdownButton, MenuItem} from 'react-bootstrap'
 import {AutoComplete} from 'components/AutoComplete';
 import {PageHeader} from './PageHeader'
 import {PageFooter} from './PageFooter'
-import {createCORSRequest, apiURL} from 'sources/createCORSRequest';
+import {createCORSRequest, apiURL} from 'shared/createCORSRequest';
 
 class Home extends React.Component {
   state = {

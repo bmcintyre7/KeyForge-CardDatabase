@@ -1,6 +1,6 @@
 import React from 'react';
 import MetaTags from 'react-meta-tags'
-import {apiURL, createCORSRequest} from 'sources/createCORSRequest'
+import {apiURL, createCORSRequest} from 'shared/createCORSRequest'
 import {PageHeader} from "components/PageHeader";
 import {PageFooter} from "components/PageFooter";
 
