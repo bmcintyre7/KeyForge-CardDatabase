@@ -5,24 +5,7 @@ import {DropdownButton, MenuItem} from 'react-bootstrap'
 import {AutoComplete} from 'components/AutoComplete';
 import {PageHeader} from './PageHeader'
 import {PageFooter} from './PageFooter'
-
-let apiURL = 'http://142.93.181.3:7001';
-
-function createCORSRequest(method, url) {
-  var xhr = new XMLHttpRequest();
-  if ('withCredentials' in xhr) {
-    // XHR for Chrome/Firefox/Opera/Safari.
-    xhr.open(method, url, false);
-  } else if (typeof XDomainRequest != 'undefined') {
-    // XDomainRequest for IE.
-    xhr = new XDomainRequest();
-    xhr.open(method, url);
-  } else {
-    // CORS not supported.
-    xhr = null;
-  }
-  return xhr;
-}
+import {createCORSRequest, apiURL} from 'sources/createCORSRequest';
 
 class Home extends React.Component {
   state = {
@@ -128,8 +111,9 @@ class Home extends React.Component {
           <div className='px-0 mx-0 minWidth-400'>
             <AutoComplete suggestions={suggestions} id={slugifiedLabel + '_Value'}/>
             <div key={'checkbox-' + slugifiedLabel} className='mx-2 px-0 displayInline'>
-              <label className='align-middle m-0 p-0'><input className='align-middle mr-1' type='checkbox' value=''
-                                                             id={slugifiedLabel + '_checkbox_Value'}/>{checkboxLabel}
+              <label className='align-middle m-0 p-0'>
+                <input className='align-middle mr-1' type='checkbox' value='' id={slugifiedLabel + '_checkbox_Value'}/>
+                {checkboxLabel}
               </label>
             </div>
           </div>
@@ -291,7 +275,6 @@ class Home extends React.Component {
     if (traits != '') {
       queryString += (queryString.length != 1 ? '&' : '') + 'traits=' + traits;
       queryString += (queryString.length != 1 ? '&' : '') + 'traitsOr=' + (!traitsOr ? 'true' : 'false');
-      console.log(traitsOr);
     }
 
     for (var i = 0; i < keywords.length; ++i)
@@ -320,8 +303,6 @@ class Home extends React.Component {
 
     this.searchQueryString = queryString;
 
-    console.log(rarities.length);
-
     this.setState({toResults: true});
   }
 
@@ -345,8 +326,6 @@ class Home extends React.Component {
 
     var traits = this.httpGetTraits().split(', ');
     traits.sort();
-
-    console.log(this.state.toResults);
 
     if (true == this.state.toResults)
       return <Redirect push to={{
