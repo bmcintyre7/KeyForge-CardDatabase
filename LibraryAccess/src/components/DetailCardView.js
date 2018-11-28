@@ -1,24 +1,8 @@
 import React from 'react';
 import MetaTags from 'react-meta-tags'
-import {apiURL} from './Home'
+import {apiURL, createCORSRequest} from 'shared/createCORSRequest'
 import {PageHeader} from "components/PageHeader";
 import {PageFooter} from "components/PageFooter";
-
-function createCORSRequest(method, url) {
-  var xhr = new XMLHttpRequest();
-  if ("withCredentials" in xhr) {
-    // XHR for Chrome/Firefox/Opera/Safari.
-    xhr.open(method, url, false);
-  } else if (typeof XDomainRequest != "undefined") {
-    // XDomainRequest for IE.
-    xhr = new XDomainRequest();
-    xhr.open(method, url);
-  } else {
-    // CORS not supported.
-    xhr = null;
-  }
-  return xhr;
-}
 
 class DetailCardView extends React.Component {
   constructor(props) {

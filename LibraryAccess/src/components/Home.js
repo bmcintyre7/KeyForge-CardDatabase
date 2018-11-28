@@ -5,24 +5,10 @@ import {DropdownButton, MenuItem} from 'react-bootstrap'
 import {AutoComplete} from 'components/AutoComplete';
 import {PageHeader} from './PageHeader'
 import {PageFooter} from './PageFooter'
+import {createCORSRequest, apiURL} from 'shared/createCORSRequest';
+import IconTitle, { ICONS } from 'shared/IconTitle';
 
 let apiURL = 'http://142.93.181.3:7005';
-
-function createCORSRequest(method, url) {
-  var xhr = new XMLHttpRequest();
-  if ('withCredentials' in xhr) {
-    // XHR for Chrome/Firefox/Opera/Safari.
-    xhr.open(method, url, false);
-  } else if (typeof XDomainRequest != 'undefined') {
-    // XDomainRequest for IE.
-    xhr = new XDomainRequest();
-    xhr.open(method, url);
-  } else {
-    // CORS not supported.
-    xhr = null;
-  }
-  return xhr;
-}
 
 class Home extends React.Component {
   state = {
@@ -116,8 +102,9 @@ class Home extends React.Component {
           <div className='px-0 mx-0 minWidth-400'>
             <AutoComplete suggestions={suggestions} id={slugifiedLabel + '_Value'}/>
             <div key={'checkbox-' + slugifiedLabel} className='mx-2 px-0 displayInline'>
-              <label className='align-middle m-0 p-0'><input className='align-middle mr-1' type='checkbox' value=''
-                                                             id={slugifiedLabel + '_checkbox_Value'}/>{checkboxLabel}
+              <label className='align-middle m-0 p-0'>
+                <input className='align-middle mr-1' type='checkbox' value='' id={slugifiedLabel + '_checkbox_Value'}/>
+                {checkboxLabel}
               </label>
             </div>
           </div>
@@ -270,7 +257,6 @@ class Home extends React.Component {
     if (traits != '') {
       queryString += (queryString.length != 1 ? '&' : '') + 'traits=' + traits;
       queryString += (queryString.length != 1 ? '&' : '') + 'traitsOr=' + (!traitsOr ? 'true' : 'false');
-      console.log(traitsOr);
     }
 
     for (var i = 0; i < keywords.length; ++i)
@@ -299,12 +285,18 @@ class Home extends React.Component {
 
     this.searchQueryString = queryString;
 
-    console.log(rarities.length);
-
     this.setState({toResults: true});
   }
 
   render() {
+    var displayHouses = new Array();
+    for (var i = 0; i < this.houses.length; ++i)
+      displayHouses.push((
+        <div key={'houses-' + i} className='displayInline maxWidth-100'>
+          <input type='checkbox' value='' id={this.slugify(this.houses[i]) + '_Value'}/><img className='mx-1 smallHouseLogo'
+                                                                                        src={this.getImageString(this.houses[i])}/>
+        </div>
+      ));
     if (true == this.state.toResults)
       return <Redirect push to={{
         pathname: '/searchResults',
@@ -327,13 +319,13 @@ class Home extends React.Component {
           <div className='row h-100 justify-content-center align-items-center'>
             <div className='col-3'/>
             <div className='col-6 text-center pr-5'>
-              {this.makeTextSearchField(<span className='far fa-id-card fa-sm'><div className={'searchLabel displayInline pl-2'}>Name:</div></span>, 'Name')}
+              {this.makeTextSearchField(<IconTitle faIcon={ICONS.ID_CARD} title='Name' />, 'Name')}
               <br/>
               <div className='row h-100 justify-content-center align-items-center'>
                 <div className='col-1'/>
                 <div className='col-2'>
                   <div className='searchLabel float-right'>
-                    <span className='fas fa-home fa-sm'><div className={'searchLabel displayInline pl-2'}>Houses:</div></span>
+                    <IconTitle faIcon={ICONS.HOME} title='Houses' solid />
                   </div>
                 </div>
                 <div className='col-6 text-center displayInline mx-0 px-0'>
@@ -346,23 +338,23 @@ class Home extends React.Component {
                 <div className='col-2'/>
               </div>
               <br/>
-              {this.makeChecklistSearchField(<span className='fas fa-fingerprint fa-sm'><div className={'searchLabel displayInline pl-2'}>Type:</div></span>, 'Type', this.types, 'Select each type the results may be.')}
+              {this.makeChecklistSearchField(<IconTitle faIcon={ICONS.FINGERPRINT} title='Type' solid />, 'Type', this.types, 'Select each type the results may be.')}
               <br/>
-              {this.makeTextSearchField(<span className='fas fa-align-justify fa-sm'><div className={'searchLabel displayInline pl-2'}>Text:</div></span>, 'Text')}
+              {this.makeTextSearchField(<IconTitle faIcon={ICONS.ALIGN_JUSTIFY} title='Text' solid />, 'Text')}
               <br/>
-              {this.makeComparisonSearchField(<span className='far fa-gem fa-sm'><div className={'searchLabel displayInline pl-2'}>Aember:</div></span>, 'Aember')}
+              {this.makeComparisonSearchField(<IconTitle faIcon={ICONS.GEM} title='Æmber' />, 'Aember')}
               <br/>
-              {this.makeComparisonSearchField(<span className='fas fa-dumbbell fa-sm'><div className={'searchLabel displayInline pl-2'}>Power:</div></span>, 'Power')}
+              {this.makeComparisonSearchField(<IconTitle faIcon={ICONS.DUMBBELL} title='Power' solid />, 'Power')}
               <br/>
-              {this.makeComparisonSearchField(<span className='fas fa-shield-alt fa-sm'><div className={'searchLabel displayInline pl-2'}>Armor:</div></span>, 'Armor')}
+              {this.makeComparisonSearchField(<IconTitle faIcon={ICONS.SHIELD_ALT} title='Armor' solid />, 'Armor')}
               <br/>
-              {this.makeChecklistSearchField(<span className='fas fa-key fa-sm'><div className={'searchLabel displayInline pl-2'}>Keywords:</div></span>, 'Keywords', this.keywords, 'Select each keyword that the results must have.')}
+              {this.makeChecklistSearchField(<IconTitle faIcon={ICONS.KEY} title='Keywords' solid />, 'Keywords', this.keywords, 'Select each keyword that the results must have.')}
               <br/>
-              {this.makeAutoCompleteSearchField(<span className='fas fa-list-ul fa-sm'><div className={'searchLabel displayInline pl-2'}>Traits:</div></span>, 'Traits', this.traits, 'Results must have all entered traits')}
+              {this.makeAutoCompleteSearchField(<IconTitle faIcon={ICONS.LIST_UI} title='Traits' solid />, 'Traits', this.traits, 'Results must have all entered traits')}
               <br/>
-              {this.makeChecklistSearchField(<span className='far fa-star fa-sm'><div className={'searchLabel displayInline pl-2'}>Rarity:</div></span>, 'Rarity', ['Common', 'Uncommon', 'Rare', 'Special'], 'Select each rarity that the results may be.')}
+              {this.makeChecklistSearchField(<IconTitle faIcon={ICONS.STAR} title='Rarity' />, 'Rarity', ['Common', 'Uncommon', 'Rare', 'Special'], 'Select each rarity that the results may be.')}
               <br/>
-              {this.makeTextSearchField(<span className='fas fa-paint-brush fa-sm'><div className={'searchLabel displayInline pl-2'}>Artist:</div></span>, 'Artist')}
+              {this.makeTextSearchField(<IconTitle faIcon={ICONS.PAINT_BRUSH} title='Artist' solid />, 'Artist')}
               <br/>
               <div className={'row h-100 justify-content-center align-items-center'}>
                 <div className={'col-3'} />

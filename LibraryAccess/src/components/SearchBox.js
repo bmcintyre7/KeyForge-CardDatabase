@@ -1,23 +1,7 @@
 import React from 'react';
 
 import {Link} from 'react-router-dom';
-import {apiURL} from './Home';
-
-function createCORSRequest(method, url) {
-  var xhr = new XMLHttpRequest();
-  if ("withCredentials" in xhr) {
-    // XHR for Chrome/Firefox/Opera/Safari.
-    xhr.open(method, url, false);
-  } else if (typeof XDomainRequest != "undefined") {
-    // XDomainRequest for IE.
-    xhr = new XDomainRequest();
-    xhr.open(method, url);
-  } else {
-    // CORS not supported.
-    xhr = null;
-  }
-  return xhr;
-}
+import {apiURL, createCORSRequest} from 'shared/createCORSRequest';
 
 class SearchBox extends React.Component {
   constructor(props) {
