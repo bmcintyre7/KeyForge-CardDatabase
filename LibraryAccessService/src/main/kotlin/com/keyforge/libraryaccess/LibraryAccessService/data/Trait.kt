@@ -9,4 +9,6 @@ data class Trait (
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     val id: Int? = null,
     val name: String = ""
-)
+) {
+    fun toSearchInfoString() = name
+}

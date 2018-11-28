@@ -6,7 +6,7 @@ import {AutoComplete} from 'components/AutoComplete';
 import {PageHeader} from './PageHeader'
 import {PageFooter} from './PageFooter'
 
-let apiURL = 'http://142.93.181.3:7001';
+let apiURL = 'http://142.93.181.3:7005';
 
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -29,21 +29,30 @@ class Home extends React.Component {
     toResults: false
   }
 
+  houses = null;
+  traits = null;
+  keywords = null;
+  types = null;
   searchQueryString = '';
 
   constructor(props) {
     super(props)
     this.getImageString = this.getImageString.bind(this)
-    this.httpGetHouses = this.httpGetHouses.bind(this);
-    this.httpGetKeywords = this.httpGetKeywords.bind(this);
-    this.httpGetTypes = this.httpGetTypes.bind(this);
-    this.httpGetTraits = this.httpGetTraits.bind(this);
+    this.httpGetSearchInfo = this.httpGetSearchInfo.bind(this);
     this.makeTextSearchField = this.makeTextSearchField.bind(this);
     this.makeComparisonSearchField = this.makeComparisonSearchField.bind(this);
     this.makeChecklistSearchField = this.makeChecklistSearchField.bind(this);
     this.doSearch = this.doSearch.bind(this);
     this.slugify = this.slugify.bind(this);
     this.checkEnter = this.checkEnter.bind(this);
+  }
+
+  componentWillMount() {
+    var response = JSON.parse(this.httpGetSearchInfo());
+    this.houses = response['houses'].sort();
+    this.keywords = response['keywords'].sort();
+    this.types = response['types'].sort();
+    this.traits = response['traits'].sort();
   }
 
   componentDidMount() {
@@ -54,29 +63,8 @@ class Home extends React.Component {
     return '/images/houses/' + houseName + '.png';
   }
 
-  httpGetHouses() {
-    var theUrl = apiURL + '/houses';
-    var xmlHttp = createCORSRequest('GET', theUrl)
-    xmlHttp.send(null);
-    return xmlHttp.responseText;
-  }
-
-  httpGetTraits() {
-    var theUrl = apiURL + '/traits';
-    var xmlHttp = createCORSRequest('GET', theUrl)
-    xmlHttp.send(null);
-    return xmlHttp.responseText;
-  }
-
-  httpGetKeywords() {
-    var theUrl = apiURL + '/keywords';
-    var xmlHttp = createCORSRequest('GET', theUrl)
-    xmlHttp.send(null);
-    return xmlHttp.responseText;
-  }
-
-  httpGetTypes() {
-    var theUrl = apiURL + '/types';
+  httpGetSearchInfo() {
+    var theUrl = apiURL + '/searchInfo';
     var xmlHttp = createCORSRequest('GET', theUrl)
     xmlHttp.send(null);
     return xmlHttp.responseText;
@@ -189,12 +177,10 @@ class Home extends React.Component {
       let slugifiedOption = this.slugify(options[i]);
 
       display.push((
-        //<Link to={'/cards/house/' + houses[i]}>
         <div key={'checkbox-' + slugifiedLabel + '-' + i} className='mx-2 px-0 displayInline'>
           <label className='align-middle m-0 p-0'><input className='align-middle mr-2' type='checkbox' value=''
                                                          id={slugifiedOption + '_Value'}/>{options[i]}</label>
         </div>
-        //</Link>
       ));
     }
 
@@ -220,9 +206,9 @@ class Home extends React.Component {
 
   doSearch() {
     var queryString = '?';
-    var keywordNames = this.httpGetKeywords().split(', ');
-    var houseNames = this.httpGetHouses().split(', ');
-    var typeNames = this.httpGetTypes().split(', ');
+    var keywordNames = this.keywords;
+    var houseNames = this.houses;
+    var typeNames = this.types;
     var name = $('#name_Value').val();
     var text = $('#text_Value').val();
     var artist = $('#artist_Value').val();
@@ -235,13 +221,6 @@ class Home extends React.Component {
         houses.push(houseNames[i]);
     }
 
-    //houses.set('Brobnar', $('#brobnar_Value').is(":checked"));
-    //houses.set('Dis', $('#dis_Value').is(":checked"));
-    //houses.set('Logos', $('#logos_Value').is(":checked"));
-    //houses.set('Mars', $('#mars_Value').is(":checked"));
-    //houses.set('Sanctum', $('#sanctum_Value').is(":checked"));
-    //houses.set('Shadows', $('#shadows_Value').is(":checked"));
-    //houses.set('Untamed', $('#untamed_Value').is(":checked"));
     var rarities = new Array();
     if ($('#common_Value').is(':checked'))
       rarities.push('Common');
@@ -326,33 +305,20 @@ class Home extends React.Component {
   }
 
   render() {
-    var houses = this.httpGetHouses().split(', ');
-    var displayHouses = new Array();
-    for (var i = 0; i < houses.length; ++i)
-      displayHouses.push((
-        //<Link to={'/cards/house/' + houses[i]}>
-        <div key={'houses-' + i} className='displayInline maxWidth-100'>
-          <input type='checkbox' value='' id={this.slugify(houses[i]) + '_Value'}/><img className='mx-1 smallHouseLogo'
-                                                                                        src={this.getImageString(houses[i])}/>
-        </div>
-        //</Link>
-      ));
-    var keywords = this.httpGetKeywords().split(', ');
-    keywords.sort();
-
-    var types = this.httpGetTypes().split(', ');
-    types.sort();
-
-    var traits = this.httpGetTraits().split(', ');
-    traits.sort();
-
-    console.log(this.state.toResults);
-
     if (true == this.state.toResults)
       return <Redirect push to={{
         pathname: '/searchResults',
         state: {query: this.searchQueryString}
       }}/>
+
+    var displayHouses = new Array();
+    for (var i = 0; i < this.houses.length; ++i)
+      displayHouses.push((
+        <div key={'houses-' + i} className='displayInline maxWidth-100'>
+          <input type='checkbox' value='' id={this.slugify(this.houses[i]) + '_Value'}/><img className='mx-1 smallHouseLogo'
+                                                                                        src={this.getImageString(this.houses[i])}/>
+        </div>
+      ));
 
     return (
       <div className='justify-content-center align-items-center text-center'>
@@ -380,7 +346,7 @@ class Home extends React.Component {
                 <div className='col-2'/>
               </div>
               <br/>
-              {this.makeChecklistSearchField(<span className='fas fa-fingerprint fa-sm'><div className={'searchLabel displayInline pl-2'}>Type:</div></span>, 'Type', types, 'Select each type the results may be.')}
+              {this.makeChecklistSearchField(<span className='fas fa-fingerprint fa-sm'><div className={'searchLabel displayInline pl-2'}>Type:</div></span>, 'Type', this.types, 'Select each type the results may be.')}
               <br/>
               {this.makeTextSearchField(<span className='fas fa-align-justify fa-sm'><div className={'searchLabel displayInline pl-2'}>Text:</div></span>, 'Text')}
               <br/>
@@ -390,9 +356,9 @@ class Home extends React.Component {
               <br/>
               {this.makeComparisonSearchField(<span className='fas fa-shield-alt fa-sm'><div className={'searchLabel displayInline pl-2'}>Armor:</div></span>, 'Armor')}
               <br/>
-              {this.makeChecklistSearchField(<span className='fas fa-key fa-sm'><div className={'searchLabel displayInline pl-2'}>Keywords:</div></span>, 'Keywords', keywords, 'Select each keyword that the results must have.')}
+              {this.makeChecklistSearchField(<span className='fas fa-key fa-sm'><div className={'searchLabel displayInline pl-2'}>Keywords:</div></span>, 'Keywords', this.keywords, 'Select each keyword that the results must have.')}
               <br/>
-              {this.makeAutoCompleteSearchField(<span className='fas fa-list-ul fa-sm'><div className={'searchLabel displayInline pl-2'}>Traits:</div></span>, 'Traits', traits, 'Results must have all entered traits')}
+              {this.makeAutoCompleteSearchField(<span className='fas fa-list-ul fa-sm'><div className={'searchLabel displayInline pl-2'}>Traits:</div></span>, 'Traits', this.traits, 'Results must have all entered traits')}
               <br/>
               {this.makeChecklistSearchField(<span className='far fa-star fa-sm'><div className={'searchLabel displayInline pl-2'}>Rarity:</div></span>, 'Rarity', ['Common', 'Uncommon', 'Rare', 'Special'], 'Select each rarity that the results may be.')}
               <br/>

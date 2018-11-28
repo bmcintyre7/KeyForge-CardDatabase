@@ -1,10 +1,7 @@
 package com.keyforge.libraryaccess.LibraryAccessService.data
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.keyforge.libraryaccess.LibraryAccessService.responses.CardBody
-import com.keyforge.libraryaccess.LibraryAccessService.responses.DetailedCardBody
-import com.keyforge.libraryaccess.LibraryAccessService.responses.ExpansionBody
-import com.keyforge.libraryaccess.LibraryAccessService.responses.KeywordBody
+import com.keyforge.libraryaccess.LibraryAccessService.responses.*
 import org.hibernate.annotations.BatchSize
 import java.text.Normalizer
 import java.util.stream.Collectors
@@ -80,6 +77,21 @@ data class Card (
         name = name,
         expansions = expansions.stream().map { cardExp -> ExpansionBody(cardExp.expansion.name, cardExp.expansion.abbreviation, cardExp.number, cardExp.expansion.abbreviation.toLowerCase() + "-" + cardExp.number) }.collect(Collectors.toList()),
         imageNames = expansions.stream().map { cardExp -> cardExp.expansion.abbreviation.toLowerCase() + "-" + cardExp.number }.collect(Collectors.toList())
+    )
+    fun toDiscordCardBody() = DiscordCardBody(
+        name = name,
+        type = type.name,
+        text = text,
+        aember = aember,
+        power = power,
+        armor = armor,
+        rarity = rarity.name,
+        directLink = "http://libraryaccess.net/cards/" + expansions[0].expansion.abbreviation.toUpperCase() + "/" + expansions[0].number,
+        expansions = expansions.stream().map { cardExp -> cardExp.expansion.abbreviation + " #" + cardExp.number }.collect(Collectors.toList()),
+        houses = houses.stream().map { house -> house.name }.collect(Collectors.toList()),
+        traits = traits.stream().map { trait -> trait.trait.name }.collect(Collectors.toList()),
+        keywords = keywords.stream().map { keyword -> keyword.keyword.name }.collect(Collectors.toList()),
+        artist = artist
     )
 
     fun slugify(word: String, replacement: String = "-") = Normalizer

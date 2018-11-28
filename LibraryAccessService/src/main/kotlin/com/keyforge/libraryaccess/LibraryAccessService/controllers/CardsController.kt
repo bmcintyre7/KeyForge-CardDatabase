@@ -9,6 +9,7 @@ import com.keyforge.libraryaccess.LibraryAccessService.specifications.CardQuery
 import org.springframework.web.bind.annotation.*
 import com.fasterxml.jackson.module.kotlin.*
 import com.keyforge.libraryaccess.LibraryAccessService.responses.DetailedCardBody
+import com.keyforge.libraryaccess.LibraryAccessService.responses.DiscordCardBody
 import java.text.Normalizer
 import org.modelmapper.ModelMapper
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,13 +23,9 @@ class CardsController (
         private val rarityRepository: RarityRepository,
         private val cardExpansionsRepository: CardExpansionsRepository,
         private val cardHousesRepository: CardHousesRepository,
-        private val cardKeywordsRepository: CardKeywordsRepository,
-        private val cardTraitsRepository: CardTraitsRepository,
-        private val expansionRepository: ExpansionRepository,
         private val keywordRepository: KeywordRepository,
         private val houseRepository: HouseRepository,
         private val traitRepository: TraitRepository
-        //private val modelMapper: ModelMapper
 ) {
 
     val mapper = jacksonObjectMapper()
@@ -148,6 +145,20 @@ class CardsController (
         return null
     }
 
+    @RequestMapping(value="cards/nameSearch/{searchVal}", method = [RequestMethod.GET])
+    fun searchByName(@PathVariable("searchVal") searchVal: String) : DiscordCardBody? {
+        var cards = mutableListOf<Card>()
+        cards.addAll(cardRepository.searchByName(searchVal))
+        cards.addAll(cardRepository.startsWithByName(searchVal))
+
+        cards.sortBy { resultSorter(it) }
+
+        if (0 == cards.size)
+            return null
+        else
+            return cards[0].toDiscordCardBody()
+    }
+
     @RequestMapping(value = "/cards/house/{house}", method = [RequestMethod.GET])
     fun getCardsByHouse(@PathVariable("house") house: String): List<DetailedCardBody> {
         val theHouse = houseRepository.findByName(house)
@@ -173,7 +184,7 @@ class CardsController (
                  @RequestParam(value = "traitsOr", required = false) traitsOr: String?,
                  @RequestParam(value = "houses", required = false) houses: MutableList<String>?,
                  @RequestParam(value = "rarities", required = false) rarities: MutableList<String>?) : ByteArray {
-        // TODO: Traits, further optimization.
+        // TODO: Further optimization.
         var queryRarities = mutableListOf<Rarity>()
         var queryTypes = mutableListOf<Type>()
         var queryHouses = mutableListOf<House>()
@@ -256,9 +267,9 @@ class CardsController (
 
         val query = CardQuery(name = name, types = queryTypes, rarities = queryRarities, text = text, houses = queryHouses, keywords = queryKeywords, traitsOr = queryOrTraits, traitsAnd = queryAndTraits, aember = aemberValue, power = powerValue, armor = armorValue)
         val results = cardRepository.findAll(query.toSpecification())
-        results.sortBy({ resultSorter(it) })
+        results.sortBy { resultSorter(it) }
 
-        val l = results.stream().map { card -> card.toCardBody() }.collect(Collectors.toList())
+        val l = results.map { card -> card.toCardBody() }.toList()
         return mapper.writeValueAsBytes(l)
        //var filteredCards = CardListBody(mutableListOf())
 
