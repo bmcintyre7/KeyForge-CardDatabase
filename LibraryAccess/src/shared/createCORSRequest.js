@@ -15,6 +15,6 @@ function createCORSRequest(method, url) {
 }
 
 
-const apiURL = 'http://142.93.181.3:7001';
+const apiURL = 'http://api.libraryaccess.net:7001';
 
 export { apiURL, createCORSRequest };

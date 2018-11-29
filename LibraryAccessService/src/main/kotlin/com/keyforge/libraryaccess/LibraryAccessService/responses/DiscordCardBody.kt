@@ -1,7 +1,5 @@
 package com.keyforge.libraryaccess.LibraryAccessService.responses
 
-import com.keyforge.libraryaccess.LibraryAccessService.data.Card
-
 data class DiscordCardBody (
     val name: String = "",
     val type: String = "",
@@ -12,40 +10,9 @@ data class DiscordCardBody (
     val rarity: String = "",
     val artist: String = "",
     val directLink: String = "",
+    val imageLink: String = "",
     val expansions: MutableList<String>,
     val houses: MutableList<String>,
     val keywords: MutableList<String>,
     val traits: MutableList<String>
-) {
-    object ModelMapper {
-        fun from(from: Card) {
-            var expansions = mutableListOf<String>()
-            var imageNames = mutableListOf<String>()
-            var houses = mutableListOf<String>()
-            var keywords = mutableListOf<String>()
-            var traits = mutableListOf<String>()
-            var directLink = ""
-
-            for (expansion in from.expansions) {
-                expansions.add(expansion.expansion.name + " #" + expansion.number)
-                imageNames.add(expansion.expansion.name.toLowerCase() + "-" + expansion.number)
-                if (directLink.isEmpty())
-                    directLink = "http://libraryaccess.net/cards/" + expansion.expansion.abbreviation.toUpperCase() + "/" + expansion.number
-            }
-
-            for (house in from.houses) {
-                houses.add(house.name)
-            }
-
-            for (keyword in from.keywords) {
-                keywords.add(keyword.keyword.name)
-            }
-
-            for (trait in from.traits) {
-                traits.add(trait.trait.name)
-            }
-
-            DiscordCardBody(from.name, from.type.name, from.text, from.aember, from.armor, from.power, from.rarity.name, from.artist, directLink, expansions, houses, keywords, traits)
-        }
-    }
-}
+)

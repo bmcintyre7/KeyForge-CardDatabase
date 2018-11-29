@@ -87,6 +87,7 @@ data class Card (
         armor = armor,
         rarity = rarity.name,
         directLink = "http://libraryaccess.net/cards/" + expansions[0].expansion.abbreviation.toUpperCase() + "/" + expansions[0].number,
+        imageLink = "http://libraryaccess.net/images/cards/" + expansions[0].expansion.abbreviation.toLowerCase() + "-" + expansions[0].number + ".jpg",
         expansions = expansions.stream().map { cardExp -> cardExp.expansion.abbreviation + " #" + cardExp.number }.collect(Collectors.toList()),
         houses = houses.stream().map { house -> house.name }.collect(Collectors.toList()),
         traits = traits.stream().map { trait -> trait.trait.name }.collect(Collectors.toList()),

@@ -150,6 +150,7 @@ class CardsController (
         var cards = mutableListOf<Card>()
         cards.addAll(cardRepository.searchByName(searchVal))
         cards.addAll(cardRepository.startsWithByName(searchVal))
+        cards.addAll(cardRepository.endsWithByName(searchVal))
 
         cards.sortBy { resultSorter(it) }
 

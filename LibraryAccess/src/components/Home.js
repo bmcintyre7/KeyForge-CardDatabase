@@ -8,8 +8,6 @@ import {PageFooter} from './PageFooter'
 import {createCORSRequest, apiURL} from 'shared/createCORSRequest';
 import IconTitle, { ICONS } from 'shared/IconTitle';
 
-let apiURL = 'http://142.93.181.3:7005';
-
 class Home extends React.Component {
   state = {
     toResults: false

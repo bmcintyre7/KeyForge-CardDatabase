@@ -12,6 +12,9 @@ interface CardRepository : JpaRepository<Card, Int>, JpaSpecificationExecutor<Ca
     @Query(value=""" FROM Card WHERE name LIKE %:searchVal% OR LOWER(name) = LOWER(:searchVal) """)
     fun searchByName(@Param("searchVal") searchVal: String): MutableList<Card>
 
-    @Query(value=""" FROM Card WHERE name LIKE :searchVal%""")
+    @Query(value=""" FROM Card WHERE name LIKE :searchVal% """)
     fun startsWithByName(@Param("searchVal") searchVal: String): MutableList<Card>
+
+    @Query(value=""" FROM Card WHERE name LIKE %:searchVal """)
+    fun endsWithByName(@Param("searchVal") searchVal: String): MutableList<Card>
 }
