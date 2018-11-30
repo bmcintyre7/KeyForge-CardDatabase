@@ -148,9 +148,11 @@ class CardsController (
     @RequestMapping(value="cards/nameSearch/{searchVal}", method = [RequestMethod.GET])
     fun searchByName(@PathVariable("searchVal") searchVal: String) : DiscordCardBody? {
         var cards = mutableListOf<Card>()
-        cards.addAll(cardRepository.searchByName(searchVal))
-        cards.addAll(cardRepository.startsWithByName(searchVal))
-        cards.addAll(cardRepository.endsWithByName(searchVal))
+        val lowerVal = searchVal.toLowerCase()
+        cards.addAll(cardRepository.containsName(lowerVal))
+        cards.addAll(cardRepository.hasName(lowerVal))
+        cards.addAll(cardRepository.startsWithByName(lowerVal))
+        cards.addAll(cardRepository.endsWithByName(lowerVal))
 
         cards.sortBy { resultSorter(it) }
 

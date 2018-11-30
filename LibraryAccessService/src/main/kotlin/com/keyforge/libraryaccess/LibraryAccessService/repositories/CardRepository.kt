@@ -9,12 +9,15 @@ import org.springframework.data.repository.query.Param
 
 @Repository
 interface CardRepository : JpaRepository<Card, Int>, JpaSpecificationExecutor<Card> {
-    @Query(value=""" FROM Card WHERE name LIKE %:searchVal% OR LOWER(name) = LOWER(:searchVal) """)
-    fun searchByName(@Param("searchVal") searchVal: String): MutableList<Card>
+    @Query(value=""" FROM Card WHERE LOWER(name) = LOWER(:searchVal) """)
+    fun hasName(@Param("searchVal") searchVal: String): MutableList<Card>
 
-    @Query(value=""" FROM Card WHERE name LIKE :searchVal% """)
+    @Query(value=""" FROM Card WHERE LOWER(name) LIKE %:searchVal% """)
+    fun containsName(@Param("searchVal") searchVal: String): MutableList<Card>
+
+    @Query(value=""" FROM Card WHERE LOWER(name) LIKE :searchVal% """)
     fun startsWithByName(@Param("searchVal") searchVal: String): MutableList<Card>
 
-    @Query(value=""" FROM Card WHERE name LIKE %:searchVal """)
+    @Query(value=""" FROM Card WHERE LOWER(name) LIKE %:searchVal """)
     fun endsWithByName(@Param("searchVal") searchVal: String): MutableList<Card>
 }
