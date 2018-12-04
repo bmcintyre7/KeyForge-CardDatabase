@@ -3,6 +3,8 @@ package com.keyforge.libraryaccess.LibraryAccessService.data
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.keyforge.libraryaccess.LibraryAccessService.responses.*
 import org.hibernate.annotations.BatchSize
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
 import java.text.Normalizer
 import java.util.stream.Collectors
 import javax.persistence.*
@@ -16,8 +18,9 @@ data class Card (
     @GeneratedValue(strategy=GenerationType.IDENTITY)
 
     val id: Int? = null,
-        val name: String = "",
-        @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
+    val name: String = "",
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "typeId")
     val type: Type,
 
@@ -27,6 +30,7 @@ data class Card (
     val armor: String? = null,
 
     @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "rarityId")
     val rarity: Rarity,
 

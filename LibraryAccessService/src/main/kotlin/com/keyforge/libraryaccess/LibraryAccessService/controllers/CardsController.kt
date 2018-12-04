@@ -3,17 +3,12 @@ package com.keyforge.libraryaccess.LibraryAccessService.controllers
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.keyforge.libraryaccess.LibraryAccessService.data.*
 import com.keyforge.libraryaccess.LibraryAccessService.repositories.*
-import com.keyforge.libraryaccess.LibraryAccessService.responses.CardBody
-import com.keyforge.libraryaccess.LibraryAccessService.responses.RarityBody
 import com.keyforge.libraryaccess.LibraryAccessService.specifications.CardQuery
 import org.springframework.web.bind.annotation.*
 import com.fasterxml.jackson.module.kotlin.*
 import com.keyforge.libraryaccess.LibraryAccessService.responses.DetailedCardBody
 import com.keyforge.libraryaccess.LibraryAccessService.responses.DiscordCardBody
 import java.text.Normalizer
-import org.modelmapper.ModelMapper
-import org.springframework.beans.factory.annotation.Autowired
-import java.util.stream.Collectors
 
 
 @RestController
@@ -134,6 +129,155 @@ class CardsController (
     //    //}
     //    return "Added:\n-------\n" + responseData.joinToString(",\n")
     //}
+
+    @RequestMapping(value = "/cardCount", method = [RequestMethod.GET])
+    @ResponseBody
+    fun getCardCount(@RequestParam(value = "name", required = false) name: String?,
+                 @RequestParam(value = "text", required = false) text: String?,
+                 @RequestParam(value = "aember", required = false) aember: String?,
+                 @RequestParam(value = "power", required = false) power: String?,
+                 @RequestParam(value = "armor", required = false) armor: String?,
+                 @RequestParam(value = "artist", required = false) artist: String?,
+                 @RequestParam(value = "types", required = false) types: MutableList<String>?,
+                 @RequestParam(value = "keywords", required = false) keywords: MutableList<String>?,
+                 @RequestParam(value = "traits", required = false) traits: String?,
+                 @RequestParam(value = "traitsOr", required = false) traitsOr: String?,
+                 @RequestParam(value = "houses", required = false) houses: MutableList<String>?,
+                 @RequestParam(value = "rarities", required = false) rarities: MutableList<String>?) : String {
+//        var theQuery = "SELECT * from Card "
+//        var theFilters = "WHERE "
+//        if (null != name) {
+//            theFilters += "name like %:name or name like %name% or name like :name% or LOWER(name) = LOWER(:name)"
+//        }
+//        if (null != text) {
+//            theFilters += "text like %:text or text like %text% or text like :text% or LOWER(text) = LOWER(:text)"
+//        }
+//        if (null != aember) {
+//            if (aember.contains(">="))
+//                theFilters += aember.substring(2)
+//            else if (aember.contains(">"))
+//                aemberValue.put("GT", aember.substring(1))
+//            else if (aember.contains("<="))
+//                aemberValue.put("LTE", aember.substring(2))
+//            else if (aember.contains("<"))
+//                aemberValue.put("LT", aember.substring(1))
+//            else if (aember.contains("="))
+//        }
+        var queryRarities = mutableListOf<Rarity>()
+        var queryTypes = mutableListOf<Type>()
+        var queryHouses = mutableListOf<House>()
+        var queryKeywords = mutableListOf<Keyword>()
+        var queryOrTraits = mutableListOf<Trait>()
+        var queryAndTraits = mutableListOf<Trait>()
+
+        if (null != rarities) {
+            val allRarities = rarityRepository.findAll()
+            for (rarity in rarities) {
+                for (storedRarity in allRarities) {
+                    if(rarity == storedRarity.name) {
+                        queryRarities.add(storedRarity)
+                        break
+                    }
+                }
+            }
+        }
+        if (null != types) {
+            val allTypes = typeRepository.findAll()
+            for (type in types) {
+                for (storedType in allTypes) {
+                    if (type == storedType.name) {
+                        queryTypes.add(storedType)
+                        break
+                    }
+                }
+            }
+        }
+        if (null != houses) {
+            val allHouses = houseRepository.findAll()
+            for (house in houses) {
+                for (storedHouse in allHouses) {
+                    if (house == storedHouse.name) {
+                        queryHouses.add(storedHouse)
+                        break
+                    }
+                }
+            }
+        }
+        if (null != keywords) {
+            val allKeywords = keywordRepository.findAll()
+            for (keyword in keywords) {
+                for (storedKeyword in allKeywords) {
+                    if (keyword == storedKeyword.name) {
+                        queryKeywords.add(storedKeyword)
+                        break
+                    }
+                }
+            }
+        }
+
+        var aemberValue = mutableMapOf<String, String>()
+        if (null != aember) {
+            if (aember.contains(">="))
+                aemberValue.put("GTE", aember.substring(2))
+            else if (aember.contains(">"))
+                aemberValue.put("GT", aember.substring(1))
+            else if (aember.contains("<="))
+                aemberValue.put("LTE", aember.substring(2))
+            else if (aember.contains("<"))
+                aemberValue.put("LT", aember.substring(1))
+            else if (aember.contains("="))
+                aemberValue.put("E", aember.substring(1))
+        }
+
+        var powerValue = mutableMapOf<String, String>()
+        if (null != power) {
+            if (power.contains(">="))
+                powerValue.put("GTE", power.substring(2))
+            else if (power.contains(">"))
+                powerValue.put("GT", power.substring(1))
+            else if (power.contains("<="))
+                powerValue.put("LTE", power.substring(2))
+            else if (power.contains("<"))
+                powerValue.put("LT", power.substring(1))
+            else if (power.contains("="))
+                powerValue.put("E", power.substring(1))
+        }
+
+        var armorValue = mutableMapOf<String, String>()
+        if (null != armor) {
+            if (armor.contains(">="))
+                armorValue.put("GTE", armor.substring(2))
+            else if (armor.contains(">"))
+                armorValue.put("GT", armor.substring(1))
+            else if (armor.contains("<="))
+                armorValue.put("LTE", armor.substring(2))
+            else if (armor.contains("<"))
+                armorValue.put("LT", armor.substring(1))
+            else if (armor.contains("="))
+                armorValue.put("E", armor.substring(1))
+        }
+
+        var traitArray = listOf<String>()
+        if (null != traits && null != traitsOr) {
+            traitArray = traits.split(", ").toList()
+
+            val allTraits = traitRepository.findAll()
+            for (trait in traitArray) {
+                for (storedTrait in allTraits) {
+                    if (trait == storedTrait.name) {
+                        if ("true" == traitsOr.toLowerCase())
+                            queryOrTraits.add(storedTrait)
+                        else
+                            queryAndTraits.add(storedTrait)
+                    }
+                }
+            }
+        }
+
+        val query = CardQuery(name = name, types = queryTypes, rarities = queryRarities, text = text, houses = queryHouses, keywords = queryKeywords, traitsOr = queryOrTraits, traitsAnd = queryAndTraits, aember = aemberValue, power = powerValue, armor = armorValue)
+        val results = cardRepository.findAll(query.toSpecification())
+        return results.size.toString()
+    }
 
     @RequestMapping(value = "/cards/{expansion}/{id}", method = [RequestMethod.GET])
     fun getCardByNumber(@PathVariable("expansion") exp: String, @PathVariable("id") id: Int) : DetailedCardBody? {

@@ -23,25 +23,35 @@ class CardView extends React.Component {
   }
 
   render() {
-    //console.log(this.httpGetCard())
-    //var theCard = JSON.parse(this.httpGetCard())
-    var theCard = this.props.card;
-    var newestExpansion = theCard['expansions'][0]['abbreviation'];
-    var newestImage = theCard['expansions'][0]['imageName'];
-    //var fullExpansionObj = theCard['expansions'][theCard['expansions'].length - 1]
-    //var newestExpansion = fullExpansionObj.substr(0, fullExpansionObj.indexOf(' #'));
-    //var newestImage = theCard['imageNames'][theCard['imageNames'].length - 1];
-    var newestExpansionNumber = theCard['expansions'][0]['number']
+    let theCard = this.props.card;
 
-    return (
-      <div>
-        <Link to={'/cards/' + newestExpansion + '/' + newestExpansionNumber}>
-          <img className={'imageBorder'} src={ this.getImageString(newestImage) } alt={ 'test' } width='250' height='350'/>
-        </Link>
-      <br/>
-        {theCard.name + " - " + newestExpansion + " #" + newestExpansionNumber}
-      </div>
-    );
+    let newestExpansion = "";
+    let newestImage = "";
+    let newestExpansionNumber = "";
+
+    if (null != theCard) {
+      newestExpansion = theCard['expansions'][0]['abbreviation'];
+      newestImage = theCard['expansions'][0]['imageName'];
+      newestExpansionNumber = theCard['expansions'][0]['number'];
+      return (
+        <div>
+          <Link to={'/cards/' + newestExpansion + '/' + newestExpansionNumber}>
+            <img className={'imageBorder'} src={ this.getImageString(newestImage) } alt={ 'test' } width='250' height='350'/>
+          </Link>
+          <br/>
+          {theCard.name + " - " + newestExpansion + " #" + newestExpansionNumber}
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Link to={'/cards/' + newestExpansion + '/' + newestExpansionNumber}>
+            <img className={'imageBorder'} src={ '/images/cards/placeholderCard.png' } alt={ 'test' } width='250' height='350'/>
+          </Link>
+          <br/>
+        </div>
+      );
+    }
   }
 }
 

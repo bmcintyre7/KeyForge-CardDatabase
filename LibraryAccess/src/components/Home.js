@@ -7,16 +7,21 @@ import {PageHeader} from './PageHeader'
 import {PageFooter} from './PageFooter'
 import {createCORSRequest, apiURL} from 'shared/createCORSRequest';
 import IconTitle, { ICONS } from 'shared/IconTitle';
+import axios from 'axios';
 
 class Home extends React.Component {
   state = {
-    toResults: false
-  }
+    toResults: false,
+    houses: [],
+    traits: [],
+    keywords: [],
+    types: []
+  };
 
-  houses = null;
-  traits = null;
-  keywords = null;
-  types = null;
+  //houses = [];
+  //traits = [];
+  //keywords = [];
+  //types = [];
   searchQueryString = '';
 
   constructor(props) {
@@ -32,15 +37,12 @@ class Home extends React.Component {
   }
 
   componentWillMount() {
-    var response = JSON.parse(this.httpGetSearchInfo());
-    this.houses = response['houses'].sort();
-    this.keywords = response['keywords'].sort();
-    this.types = response['types'].sort();
-    this.traits = response['traits'].sort();
+    this.httpGetSearchInfo();
   }
 
   componentDidMount() {
     window.scrollTo(0, 0);
+
   }
 
   getImageString(houseName) {
@@ -49,10 +51,18 @@ class Home extends React.Component {
 
   httpGetSearchInfo() {
     var theUrl = apiURL + '/searchInfo';
-    var xmlHttp = createCORSRequest('GET', theUrl)
-    xmlHttp.send(null);
-    return xmlHttp.responseText;
+    axios.get(theUrl).then(newData => {
+      this.setState({houses: newData.data.houses});
+      this.setState({types: newData.data.types});
+      this.setState({keywords: newData.data.keywords});
+      this.setState({traits: newData.data.traits});
+    });
   }
+
+    //var xmlHttp = createCORSRequest('GET', theUrl)
+    //console.log(xmlHttp);
+    //xmlHttp.send(null);
+    //return xmlHttp;
 
   // Event fired when the user presses a key down
   checkEnter = e => { {
@@ -111,7 +121,6 @@ class Home extends React.Component {
       </div>
     );
   }
-
 
   slugify(text) {
     return text.toString().toLowerCase()
@@ -191,9 +200,9 @@ class Home extends React.Component {
 
   doSearch() {
     var queryString = '?';
-    var keywordNames = this.keywords;
-    var houseNames = this.houses;
-    var typeNames = this.types;
+    var keywordNames = this.state.keywords;
+    var houseNames = this.state.houses;
+    var typeNames = this.state.types;
     var name = $('#name_Value').val();
     var text = $('#text_Value').val();
     var artist = $('#artist_Value').val();
@@ -287,14 +296,9 @@ class Home extends React.Component {
   }
 
   render() {
-    var displayHouses = new Array();
-    for (var i = 0; i < this.houses.length; ++i)
-      displayHouses.push((
-        <div key={'houses-' + i} className='displayInline maxWidth-100'>
-          <input type='checkbox' value='' id={this.slugify(this.houses[i]) + '_Value'}/><img className='mx-1 smallHouseLogo'
-                                                                                        src={this.getImageString(this.houses[i])}/>
-        </div>
-      ));
+    if (null == this.state.houses)
+      return<div></div>;
+
     if (true == this.state.toResults)
       return <Redirect push to={{
         pathname: '/searchResults',
@@ -302,11 +306,11 @@ class Home extends React.Component {
       }}/>
 
     var displayHouses = new Array();
-    for (var i = 0; i < this.houses.length; ++i)
+    for (var i = 0; i < this.state.houses.length; ++i)
       displayHouses.push((
         <div key={'houses-' + i} className='displayInline maxWidth-100'>
-          <input type='checkbox' value='' id={this.slugify(this.houses[i]) + '_Value'}/><img className='mx-1 smallHouseLogo'
-                                                                                        src={this.getImageString(this.houses[i])}/>
+          <input type='checkbox' value='' id={this.slugify(this.state.houses[i]) + '_Value'}/><img className='mx-1 smallHouseLogo'
+                                                                                        src={this.getImageString(this.state.houses[i])}/>
         </div>
       ));
 
@@ -336,7 +340,7 @@ class Home extends React.Component {
                 <div className='col-2'/>
               </div>
               <br/>
-              {this.makeChecklistSearchField(<IconTitle faIcon={ICONS.FINGERPRINT} title='Type' solid />, 'Type', this.types, 'Select each type the results may be.')}
+              {this.makeChecklistSearchField(<IconTitle faIcon={ICONS.FINGERPRINT} title='Type' solid />, 'Type', this.state.types, 'Select each type the results may be.')}
               <br/>
               {this.makeTextSearchField(<IconTitle faIcon={ICONS.ALIGN_JUSTIFY} title='Text' solid />, 'Text')}
               <br/>
@@ -346,9 +350,9 @@ class Home extends React.Component {
               <br/>
               {this.makeComparisonSearchField(<IconTitle faIcon={ICONS.SHIELD_ALT} title='Armor' solid />, 'Armor')}
               <br/>
-              {this.makeChecklistSearchField(<IconTitle faIcon={ICONS.KEY} title='Keywords' solid />, 'Keywords', this.keywords, 'Select each keyword that the results must have.')}
+              {this.makeChecklistSearchField(<IconTitle faIcon={ICONS.KEY} title='Keywords' solid />, 'Keywords', this.state.keywords, 'Select each keyword that the results must have.')}
               <br/>
-              {this.makeAutoCompleteSearchField(<IconTitle faIcon={ICONS.LIST_UI} title='Traits' solid />, 'Traits', this.traits, 'Results must have all entered traits')}
+              {this.makeAutoCompleteSearchField(<IconTitle faIcon={ICONS.LIST_UI} title='Traits' solid />, 'Traits', this.state.traits, 'Results must have all entered traits')}
               <br/>
               {this.makeChecklistSearchField(<IconTitle faIcon={ICONS.STAR} title='Rarity' />, 'Rarity', ['Common', 'Uncommon', 'Rare', 'Special'], 'Select each rarity that the results may be.')}
               <br/>
